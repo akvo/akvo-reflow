@@ -5,3 +5,7 @@ CREATE TABLE IF NOT EXISTS events (
     payload jsonb,
     created_at timestamptz DEFAULT now()
 );
+
+-- :name drop-table-events :! :raw
+-- :doc Drop the events table
+DROP TABLE IF EXISTS events;

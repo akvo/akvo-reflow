@@ -6,3 +6,6 @@
 
 (defn migrate [db-uri]
   (create-table-events db-uri))
+
+(defn rollback [db-uri]
+  (drop-table-events db-uri))

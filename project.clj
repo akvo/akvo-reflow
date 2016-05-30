@@ -13,6 +13,7 @@
                  [ragtime "0.5.3"]
                  [ring "1.4.0"]
                  [ring/ring-defaults "0.2.0"]
+                 [ring/ring-mock "0.3.0"]
                  [ring-jetty-component "0.3.1"]
                  [ring-webjars "0.1.1"]
                  [org.slf4j/slf4j-nop "1.7.21"]

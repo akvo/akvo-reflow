@@ -12,8 +12,7 @@
             [dev.tasks :refer :all]
             [akvo-reflow.config :as config]
             [akvo-reflow.system :as system]
-            [akvo-reflow.migrate :as migrate]
-            ))
+            [akvo-reflow.migrate :as migrate]))
 
 (def dev-config
   {:app {:middleware [wrap-stacktrace]}})
