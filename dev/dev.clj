@@ -22,13 +22,14 @@
               config/environ
               dev-config))
 
+(def db-uri {:connection-uri (-> config :db :uri)})
+
 (defn new-system []
   (into (system/new-system config)
         {}))
 
 (defn migrate []
   (migrate/migrate {:connection-uri (-> config :db :uri)}))
-
 
 (when (io/resource "local.clj")
   (load "local"))

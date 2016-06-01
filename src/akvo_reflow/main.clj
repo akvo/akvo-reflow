@@ -1,17 +1,16 @@
 (ns akvo-reflow.main
   (:gen-class)
-  (:require [clojure.java.io :as io]
+  (:require [akvo-reflow.config :as config]
+            [akvo-reflow.system :refer [new-system]]
+            [akvo-reflow.migrate :as migrate]
             [com.stuartsierra.component :as component]
             [duct.middleware.errors :refer [wrap-hide-errors]]
             [duct.util.runtime :refer [add-shutdown-hook]]
-            [meta-merge.core :refer [meta-merge]]
-            [akvo-reflow.config :as config]
-            [akvo-reflow.system :refer [new-system]]
-            [akvo-reflow.migrate :as migrate]))
+            [meta-merge.core :refer [meta-merge]]))
 
 (def prod-config
   {:app {:middleware     [[wrap-hide-errors :internal-error]]
-         :internal-error (io/resource "errors/500.html")}})
+         :internal-error "Internal Server Error"}})
 
 (def config
   (meta-merge config/defaults
