@@ -1,6 +1,5 @@
 (ns akvo-reflow.endpoint.fixtures
   (:require
-    ;[akvo-reflow.config :as config]
     [akvo-reflow.migrate :as migrate]
     [dev :refer [db-uri]]
     [user :refer [dev]]
@@ -10,13 +9,9 @@
 
 
 (defn system-fixture
-  "Starts the system and migrates, no setup or tear down."
+  "Migrate creates the events table."
   [f]
   (try
-    (dev)
-    ;(go)
     (migrate/migrate db-uri)
     (f)
-    (migrate/rollback db-uri)
-    ;(finally (stop))
-    ))
+    (migrate/rollback db-uri)))
