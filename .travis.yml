@@ -1,8 +1,8 @@
 language:
 - clojure
 
-services:
-- postgresql
+addons:
+  postgresql: "9.4"
 
 lein: lein2
 
