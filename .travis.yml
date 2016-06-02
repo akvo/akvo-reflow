@@ -1,6 +1,9 @@
 language:
 - clojure
 
+services:
+- postgresql
+
 lein: lein2
 
 sudo: false
