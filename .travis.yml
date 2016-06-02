@@ -15,4 +15,4 @@ before_install:
 - ./provision/setup.sh
 
 script:
-- lein2 do clean, check, test with-profile dev
+- lein2 do clean, check, with-profile dev test
