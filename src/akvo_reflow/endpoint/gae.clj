@@ -6,24 +6,17 @@
             [meta-merge.core :refer [meta-merge]]
             [ring.middleware.stacktrace :refer [wrap-stacktrace]]))
 
-
 (hugsql.core/def-db-fns "akvo_reflow/endpoint/gae.sql")
 
 
-(def dev-config
-  {:app {:middleware [wrap-stacktrace]}})
-
-(def config
-  (meta-merge config/defaults
-              config/environ
-              dev-config))
-
-(defn endpoint [{{db :spec} :db}]
+(defn endpoint [{{db_uri :uri} :db :as args}]
+  (println "args" args)
   (context "/gae" []
 
     (GET "/" [] "Hello World")
 
     (POST "/" []
       (fn [{:keys [:body ] :as request}]
+        (println "request" request "db_uri" db_uri)
         (let [body (json/generate-string (slurp body))]
-          (insert-event {:connection-uri (-> config :db :uri)} {:payload body}))))))
+          (insert-event db_uri {:payload body}))))))
