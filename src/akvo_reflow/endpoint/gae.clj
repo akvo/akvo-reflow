@@ -1,6 +1,5 @@
 (ns akvo-reflow.endpoint.gae
-  (:require [akvo-reflow.config :as config]
-            [cheshire.core :as json]
+  (:require [cheshire.core :as json]
             [compojure.core :refer :all]
             [hugsql.core]
             [meta-merge.core :refer [meta-merge]]
@@ -9,14 +8,12 @@
 (hugsql.core/def-db-fns "akvo_reflow/endpoint/gae.sql")
 
 
-(defn endpoint [{{db_uri :uri} :db :as args}]
-  (println "args" args)
+(defn endpoint [{{db_uri :uri} :db}]
   (context "/gae" []
 
     (GET "/" [] "Hello World")
 
     (POST "/" []
-      (fn [{:keys [:body ] :as request}]
-        (println "request" request "db_uri" db_uri)
+      (fn [{:keys [:body ]}]
         (let [body (json/generate-string (slurp body))]
           (insert-event db_uri {:payload body}))))))

@@ -1,5 +1,5 @@
 (ns akvo-reflow.system
-  (:require
+  (:require [akvo.commons.psql-util]
             [com.stuartsierra.component :as component]
             [duct.component.endpoint :refer [endpoint-component]]
             [duct.component.handler :refer [handler-component]]
