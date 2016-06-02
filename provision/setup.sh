@@ -18,9 +18,6 @@ psql -c "CREATE ROLE reflow WITH PASSWORD 'password' CREATEDB LOGIN;"
 ## Create dash dbs
 psql -f $DIR/helpers/create-reflow.sql
 
-# Migrate, seed tenant manager with tenants & migrate added tenants
-lein do migrate
-
 echo ""
 echo "----------"
 echo "Done!"
