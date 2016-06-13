@@ -57,15 +57,16 @@ dev=> (reset)
 
 ### Testing
 
-Testing is fastest through the REPL, as you avoid environment startup
-time.
+Testing uses [lein-test-refresh](https://github.com/jakemcc/lein-test-refresh).
+Open a terminal in the project root and enter
 
-```clojure
-dev=> (test)
-...
+```sh
+lein test-refresh
 ```
 
-But you can also run tests through Leiningen.
+This will run the tests and automatically re-run the tests as soon as a file is changed.
+
+Of course you can also run tests directly in Leiningen.
 
 ```sh
 lein test

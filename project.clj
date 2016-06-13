@@ -37,5 +37,6 @@
                                   [kerodon "0.7.0"]]
                    :source-paths ["dev"]
                    :repl-options {:init-ns user}
-                   :env {:port "3000"}}
+                   :env {:port "3000"}
+                   :plugins [[com.jakemccrary/lein-test-refresh "0.15.0"]]}
    :project/test  {}})
