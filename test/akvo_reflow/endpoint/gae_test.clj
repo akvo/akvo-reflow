@@ -28,5 +28,6 @@
               :headers {"Content-Type" "text/html; charset=utf-8"}})))
 
     (testing "verify data"
+      (println "db uri" db-uri)
       (is (= (:payload (first (all-events db-uri)))
              some-json)))))
