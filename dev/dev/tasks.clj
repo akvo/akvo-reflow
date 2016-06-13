@@ -7,5 +7,5 @@
 (defn setup []
   (gen/locals))
 
-(defn test []
-  (eftest/run-tests (eftest/find-tests "test") {:multithread? false}))
+;(defn test []
+;  (eftest/run-tests (eftest/find-tests "test") {:multithread? false}))
