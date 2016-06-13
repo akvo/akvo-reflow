@@ -5,6 +5,7 @@
 (hugsql.core/def-db-fns "akvo_reflow/migrate.sql")
 
 (defn migrate [db-uri]
+  (println "migrate db uri" db-uri)
   (create-table-events db-uri))
 
 (defn rollback [db-uri]
