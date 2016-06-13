@@ -28,7 +28,7 @@
    :test [:project/test :profiles/test]
    :uberjar {:aot :all}
    :profiles/dev  {}
-   :profiles/test {}
+   :profiles/test {:env {:database-url "jdbc:postgresql://localhost/test_reflow"}}
    :project/dev   {:dependencies [[duct/generate "0.6.1"]
                                   [reloaded.repl "0.2.1"]
                                   [org.clojure/tools.namespace "0.2.11"]
