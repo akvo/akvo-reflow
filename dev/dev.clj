@@ -24,6 +24,9 @@
 
 (def db-uri {:connection-uri (-> config :db :uri)})
 
+(def test-db-uri
+  {:connection-uri "jdbc:postgresql://localhost/test_reflow"})
+
 (defn new-system []
   (into (system/new-system config)
         {}))

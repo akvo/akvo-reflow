@@ -1,7 +1,7 @@
 (ns akvo-reflow.endpoint.fixtures
   (:require
     [akvo-reflow.migrate :as migrate]
-    [dev :refer [db-uri]]
+    [dev :refer [test-db-uri]]
     [user :refer [dev]]
     [meta-merge.core :refer [meta-merge]]
     [reloaded.repl :refer [system init start stop go reset]]
@@ -12,6 +12,6 @@
   "Migrate creates the events table."
   [f]
   (try
-    (migrate/migrate db-uri)
+    (migrate/migrate test-db-uri)
     (f)
-    (migrate/rollback db-uri)))
+    (migrate/rollback test-db-uri)))

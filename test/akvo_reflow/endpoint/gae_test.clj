@@ -2,7 +2,7 @@
   (:require [akvo-reflow.endpoint.gae :as gae]
             [akvo-reflow.endpoint.fixtures :refer [system-fixture]]
             [clojure.test :refer :all]
-            [dev :refer [db-uri]]
+            [dev :refer [test-db-uri]]
             [hugsql.core :as hugsql]
             [meta-merge.core :refer [meta-merge]]
             [ring.middleware.stacktrace :refer [wrap-stacktrace]]
@@ -12,7 +12,7 @@
 
 
 (def handler
-  (gae/endpoint {:db {:uri db-uri}}))
+  (gae/endpoint {:db {:uri test-db-uri}}))
 
 (use-fixtures :once system-fixture)
 
@@ -28,5 +28,5 @@
               :headers {"Content-Type" "text/html; charset=utf-8"}})))
 
     (testing "verify data"
-      (is (= (:payload (first (all-events db-uri)))
+      (is (= (:payload (first (all-events test-db-uri)))
              some-json)))))
