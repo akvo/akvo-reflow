@@ -1,0 +1,45 @@
+{
+  "orgId": "akvoflow-uat1",
+  "entity": {
+    "namespace": "",
+    "appId": "akvoflow-uat1",
+    "kind": "SurveyGroup",
+    "key": {
+      "namespace": "",
+      "appId": "akvoflow-uat1",
+      "kind": "SurveyGroup",
+      "complete": true,
+      "name": null,
+      "parent": null,
+      "id": 5770237022568448
+    },
+    "parent": null,
+    "properties": {
+      "defaultLanguageCode": "en",
+      "ancestorIds": [0],
+      "newLocaleSurveyId": null,
+      "projectType": "PROJECT_FOLDER",
+      "lastUpdateDateTime": 1462883547507,
+      "code": "One two three",
+      "monitoringGroup": false,
+      "parentId": 0,
+      "lastUpdateUserId": null,
+      "description": "",
+      "name": "One two three",
+      "createdDateTime": 1462883536260,
+      "privacyLevel": "PRIVATE",
+      "path": "/One two three",
+      "published": false,
+      "createUserId": null
+    }
+  },
+  "context": {
+    "timestamp": 1462883547507,
+    "source": {
+      "id": 4785074604081152,
+      "email": "test@example.com",
+      "type": "USER"
+    }
+  },
+  "eventType": "surveyGroupUpdated"
+}
