@@ -1,0 +1,67 @@
+{
+  "orgId": "akvoflowsandbox",
+  "entity": {
+    "key": {
+      "name": null,
+      "parent": null,
+      "id": 42953002,
+      "appId": "s~akvoflowsandbox",
+      "complete": true,
+      "kind": "Question",
+      "namespace": ""
+    },
+    "parent": null,
+    "appId": "s~akvoflowsandbox",
+    "kind": "Question",
+    "namespace": "",
+    "properties": {
+      "allowDecimal": false,
+      "questionId": null,
+      "dependentQuestionAnswer": null,
+      "localeLocationFlag": false,
+      "localeNameFlag": false,
+      "type": "FREE_TEXT",
+      "tip": null,
+      "allowLine": true,
+      "maxVal": null,
+      "metricId": null,
+      "order": 2,
+      "isName": false,
+      "collapseable": false,
+      "path": "My survey 1/Some new form/QG#1",
+      "allowMultipleFlag": false,
+      "immutable": false,
+      "allowOtherFlag": false,
+      "allowPolygon": true,
+      "createUserId": null,
+      "allowSign": false,
+      "text": "New question - please change name",
+      "ancestorIds": null,
+      "minVal": null,
+      "sourceQuestionId": null,
+      "requireDoubleEntry": false,
+      "referenceId": null,
+      "cascadeResourceId": null,
+      "lastUpdateDateTime": 1465912334587,
+      "mandatoryFlag": true,
+      "questionGroupId": 44793003,
+      "dependentFlag": false,
+      "lastUpdateUserId": null,
+      "dependentQuestionId": null,
+      "allowPoints": true,
+      "geoLocked": false,
+      "createdDateTime": 1465912334587,
+      "surveyId": 40993004,
+      "allowExternalSources": false
+    }
+  },
+  "context": {
+    "timestamp": 1465912334587,
+    "source": {
+      "id": 1554002,
+      "email": "ivan@akvo.org",
+      "type": "USER"
+    }
+  },
+  "eventType": "questionCreated"
+}

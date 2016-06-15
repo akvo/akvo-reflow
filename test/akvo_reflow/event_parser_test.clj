@@ -62,7 +62,44 @@
                                  "path" "My survey 1/Some new form"
                                  "repeatable" false
                                  "status" "READY"
-                                 "surveyId" 40993004}}]}])
+                                 "formId" 40993004}}]}
+   {:event-type "Question"
+    :samples [{:file-name "question_1.json"
+               :expected-result {"allowDecimal" false
+                                 "allowExternalSources" false
+                                 "allowLine" true
+                                 "allowMultipleFlag" false
+                                 "allowOtherFlag" false
+                                 "allowPoints" true
+                                 "allowPolygon" true
+                                 "allowSign" false
+                                 "ancestorIds" nil
+                                 "cascadeResourceId" nil
+                                 "collapseable" false
+                                 "createdDateTime" 1465912334587
+                                 "dependentFlag" false
+                                 "dependentQuestionAnswer" nil
+                                 "dependentQuestionId" nil
+                                 "geoLocked" false
+                                 "immutable" false
+                                 "isName" false
+                                 "lastUpdateDateTime" 1465912334587
+                                 "localeLocationFlag" false
+                                 "localeNameFlag" false
+                                 "mandatoryFlag" true
+                                 "maxVal" nil
+                                 "metricId" nil
+                                 "minVal" nil
+                                 "order" 2
+                                 "questionGroupId" 44793003
+                                 "identifier" nil
+                                 "referenceId" nil
+                                 "requireDoubleEntry" false
+                                 "sourceQuestionId" nil
+                                 "formId" 40993004
+                                 "displayText" "New question - please change name"
+                                 "tip" nil
+                                 "questionType" "FREE_TEXT"}}]}])
 
 (defn transform-sample
   [sample]

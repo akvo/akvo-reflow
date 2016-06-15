@@ -62,8 +62,26 @@
   [properties]
     (rename-keys properties {"desc" "description" "surveyGroupId" "surveyId"}))
 
+(defn question-group
+  "Transformations for GAE QuestionGroup to Unilog QuestionGroup"
+  [properties]
+  (->
+    properties
+    (assoc  "name" (get-string-with-default properties "name" "<name missing>"))
+    (rename-keys {"surveyId" "formId"})))
+
+(defn question
+  "Transformations for GAE Question to Unilog Question"
+  [properties]
+  (rename-keys properties {"text" "displayText"
+                           "questionId" "identifier"
+                           "surveyId" "formId"
+                           "type" "questionType"}))
+
 (defn transform-event [kind properties]
   (case kind
     "SurveyGroup" (survey properties)
     "Survey" (form properties)
+    "QuestionGroup" (question-group properties)
+    "Question" (question properties)
     properties))
