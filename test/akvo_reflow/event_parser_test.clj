@@ -99,7 +99,23 @@
                                  "formId" 40993004
                                  "displayText" "New question - please change name"
                                  "tip" nil
-                                 "questionType" "FREE_TEXT"}}]}])
+                                 "questionType" "FREE_TEXT"}}]}
+   {:event-type "DeviceFiles"
+    :samples [{:file-name "device_files_1.json"
+               :expected-result {"URI" "https://akvoflowsandbox.s3.amazonaws.com/devicezip/d3f64886-9004-4bbd-afea-98776ff33bff.zip"
+                                 "ancestorIds" nil
+                                 "androidId" "4586599e2859c369"
+                                 "checksum" nil
+                                 "createdDateTime" 1465912477091
+                                 "imei" "358848047655824"
+                                 "lastUpdateDateTime" 1465912477091
+                                 "phoneNumber" ""
+                                 "processDate" "2016_06_14_13:54:35"
+                                 "processedStatus" "PROCESSED_NO_ERRORS"
+                                 "processingMessageText" nil
+                                 "status" nil
+                                 "surveyInstanceId" 40283002
+                                 "uploadDateTime" 1465912475756}}]}])
 
 (defn transform-sample
   [sample]

@@ -1,0 +1,43 @@
+{
+  "orgId": "akvoflowsandbox",
+  "entity": {
+    "key": {
+      "name": null,
+      "parent": null,
+      "id": 35773003,
+      "appId": "s~akvoflowsandbox",
+      "complete": true,
+      "kind": "DeviceFiles",
+      "namespace": ""
+    },
+    "parent": null,
+    "appId": "s~akvoflowsandbox",
+    "kind": "DeviceFiles",
+    "namespace": "",
+    "properties": {
+      "ancestorIds": null,
+      "status": null,
+      "imei": "358848047655824",
+      "processingMessageText": null,
+      "androidId": "4586599e2859c369",
+      "lastUpdateDateTime": 1465912477091,
+      "checksum": null,
+      "surveyInstanceId": 40283002,
+      "lastUpdateUserId": null,
+      "phoneNumber": "",
+      "uploadDateTime": 1465912475756,
+      "processedStatus": "PROCESSED_NO_ERRORS",
+      "createdDateTime": 1465912477091,
+      "processDate": "2016_06_14_13:54:35",
+      "URI": "https://akvoflowsandbox.s3.amazonaws.com/devicezip/d3f64886-9004-4bbd-afea-98776ff33bff.zip",
+      "createUserId": null
+    }
+  },
+  "context": {
+    "timestamp": 1465912477091,
+    "source": {
+      "type": "SYSTEM"
+    }
+  },
+  "eventType": "deviceFileCreated"
+}
