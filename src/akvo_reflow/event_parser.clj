@@ -78,10 +78,45 @@
                            "surveyId" "formId"
                            "type" "questionType"}))
 
+(defn device-file
+  "Transformations for GAE DeviceFiles to Unilog DeviceFile"
+  [properties]
+  (rename-keys properties {"URI" "uri"}))
+
+(defn data-point
+  "Transformations for GAE SurveyedLocale to Unilog DataPoint"
+  [properties]
+  (rename-keys properties {"latitude" "lat"
+                           "longitude" "lon"
+                           "displayName" "name"
+                           "surveyGroupId" "surveyId"}))
+
+(defn form-instance
+  "Transformations for GAE SurveyInstance to Unilog FormInstance"
+  [properties]
+  (rename-keys properties {"surveyId" "formId"
+                           "surveyedLocaleId" "dataPointId"}))
+
+(defn answer
+  "Transformations for GAE QuestionAnswerStore to Unilog Answer"
+  [properties]
+  (->
+    properties
+    (assoc  "value" (get-string-with-default properties "value" (get properties "valueText")))
+    (assoc "questionID" (Integer. (re-find  #"\d+" (get properties "questionID"))))
+    (dissoc "valueText")
+    (rename-keys {"surveyInstanceId" "formInstanceId"
+                  "type" "answerType"
+                  "surveyId" "formId"})))
+
 (defn transform-event [kind properties]
   (case kind
     "SurveyGroup" (survey properties)
     "Survey" (form properties)
     "QuestionGroup" (question-group properties)
     "Question" (question properties)
+    "DeviceFiles" (device-file properties)
+    "SurveyedLocale" (data-point properties)
+    "SurveyInstance" (form-instance properties)
+    "QuestionAnswerStore" (answer properties)
     properties))

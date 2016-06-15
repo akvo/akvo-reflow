@@ -102,7 +102,7 @@
                                  "questionType" "FREE_TEXT"}}]}
    {:event-type "DeviceFiles"
     :samples [{:file-name "device_files_1.json"
-               :expected-result {"URI" "https://akvoflowsandbox.s3.amazonaws.com/devicezip/d3f64886-9004-4bbd-afea-98776ff33bff.zip"
+               :expected-result {"uri" "https://akvoflowsandbox.s3.amazonaws.com/devicezip/d3f64886-9004-4bbd-afea-98776ff33bff.zip"
                                  "ancestorIds" nil
                                  "androidId" "4586599e2859c369"
                                  "checksum" nil
@@ -124,15 +124,15 @@
                                  "createdDateTime" 1465912476087
                                  "creationSurveyId" nil
                                  "currentStatus" nil
-                                 "displayName" nil
+                                 "name" nil
                                  "geocells" nil
                                  "identifier" "42v1-jyvd-he9s"
                                  "lastSurveyalInstanceId" nil
                                  "lastSurveyedDate" nil
                                  "lastUpdateDateTime" 1465912476087
-                                 "latitude" nil
+                                 "lat" nil
                                  "localeType" "PUBLIC"
-                                 "longitude" nil
+                                 "lon" nil
                                  "organization" "Akvo"
                                  "sublevel1" nil
                                  "sublevel2" nil
@@ -140,9 +140,49 @@
                                  "sublevel4" nil
                                  "sublevel5" nil
                                  "sublevel6" nil
-                                 "surveyGroupId" 42083002
+                                 "surveyId" 42083002
                                  "surveyInstanceContrib" nil
-                                 "systemIdentifier" nil}}]}])
+                                 "systemIdentifier" nil}}]}
+   {:event-type "SurveyInstance"
+    :samples [{:file-name "survey_instance_1.json"
+               :expected-result {"ancestorIds" nil
+                                 "approvedFlag" nil
+                                 "approximateLocationFlag" nil
+                                 "collectionDate" 1465912468220
+                                 "community" nil
+                                 "countryCode" nil
+                                 "createdDateTime" 1465912476278
+                                 "deviceFileId" nil
+                                 "deviceIdentifier" "ipdroid"
+                                 "lastUpdateDateTime" 1465912478274
+                                 "localeGeoLocation" nil
+                                 "sublevel1" nil
+                                 "sublevel2" nil
+                                 "sublevel3" nil
+                                 "sublevel4" nil
+                                 "sublevel5" nil
+                                 "sublevel6" nil
+                                 "submitterName" "ivanp"
+                                 "formId" 40993004
+                                 "surveyalTime" 11
+                                 "surveyedLocaleDisplayName" nil
+                                 "dataPointId" 37663003
+                                 "surveyedLocaleIdentifier" "42v1-jyvd-he9s"
+                                 "userID" 1
+                                 "uuid" "d3f64886-9004-4bbd-afea-98776ff33bff"}}]}
+   {:event-type "QuestionAnswerStore"
+    :samples [{:file-name "question_answer_store_1.json"
+               :expected-result {"questionID" 42953002
+                                 "lastUpdateDateTime" 1465912476556
+                                 "createdDateTime" 1465912476556
+                                 "value" "[{\"text\":\"Option 2\",\"code\":\"02\"}]"
+                                 "collectionDate" 1465912468220
+                                 "iteration" 0
+                                 "answerType" "OPTION"
+                                 "formInstanceId" 40283002
+                                 "ancestorIds" nil
+                                 "formId" 40993004
+                                 "arbitratyNumber" nil}}]}])
 
 (defn transform-sample
   [sample]

@@ -1,0 +1,43 @@
+{
+  "orgId": "akvoflowsandbox",
+  "entity": {
+    "key": {
+      "name": null,
+      "parent": null,
+      "id": 42943005,
+      "appId": "s~akvoflowsandbox",
+      "complete": true,
+      "kind": "QuestionAnswerStore",
+      "namespace": ""
+    },
+    "parent": null,
+    "appId": "s~akvoflowsandbox",
+    "kind": "QuestionAnswerStore",
+    "namespace": "",
+    "properties": {
+      "ancestorIds": null,
+      "strength": null,
+      "questionID": "42953002",
+      "arbitratyNumber": null,
+      "lastUpdateDateTime": 1465912476556,
+      "type": "OPTION",
+      "surveyInstanceId": 40283002,
+      "collectionDate": 1465912468220,
+      "iteration": 0,
+      "valueText": null,
+      "lastUpdateUserId": null,
+      "value": "[{\"text\":\"Option 2\",\"code\":\"02\"}]",
+      "createdDateTime": 1465912476556,
+      "surveyId": 40993004,
+      "scoredValue": null,
+      "createUserId": null
+    }
+  },
+  "context": {
+    "timestamp": 1465912476556,
+    "source": {
+      "type": "SYSTEM"
+    }
+  },
+  "eventType": "answerCreated"
+}
