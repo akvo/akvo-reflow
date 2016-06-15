@@ -1,24 +1,36 @@
 (ns akvo-reflow.event-parser-test
   (:require
-    [akvo-reflow.event-parser :refer [survey properties parse]]
+    [akvo-reflow.event-parser :refer
+     [drop-deprecated-props event-properties kind parse transform-event]]
     [clojure.test :refer :all]))
 
 (def survey-group-sample
   (slurp "test/akvo_reflow/survey_group_sample.json"))
 
+(def survey-sample-1
+  (slurp "test/akvo_reflow/survey_sample_1.json"))
+
 (deftest events
   []
-  (testing "SurveyGroup -> Survey"
-    (is (=
-          (count (parse survey-group-sample))
-          4))
-    (is (=
-          (count (properties (parse survey-group-sample)))
-           16))
-    (is (=
-          (survey (properties (parse survey-group-sample)))
-          {"description"     ""
-           "name"            "One two three"
-           "parentId"        0
-           "public"          false
-           "surveyGroupType" "FOLDER"}))))
+  (testing "SurveyGroup"
+    (let [data (parse survey-group-sample)
+          event-properties (event-properties data)
+          kind (kind data)]
+      (is (=
+            (transform-event kind (drop-deprecated-props kind event-properties))
+            {
+             "parentId" 0,
+             "newLocaleSurveyId" nil,
+             "defaultLanguageCode" "en",
+             "surveyGroupType" "FOLDER",
+             "lastUpdateDateTime" 1462883547507,
+             "createdDateTime" 1462883536260,
+             "name" "One two three",
+             "published" false,
+             "createUserId" nil,
+             "ancestorIds" [0],
+             "public" false,
+             "monitoringGroup" false,
+             "code" "One two three",
+             "description" "",
+             "lastUpdateUserId" nil})))))
