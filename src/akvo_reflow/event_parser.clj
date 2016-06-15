@@ -1,7 +1,7 @@
 (ns akvo-reflow.event-parser
   (:require
     [cheshire.core :as json]
-    [clojure.set :refer [difference]]
+    [clojure.set :refer [difference rename-keys]]
     [clojure.string :refer [blank?]]))
 
 
@@ -52,13 +52,18 @@
     properties
     (assoc  "name" (get-string-with-default properties "name" "<name missing>"))
     (assoc
-      "surveyGroupType"
+      "projectType"
       (get-string-with-default project-types (get properties "projectType") "<project type missing>"))
-    (dissoc "projectType")
-    (assoc "public" (= (get properties "privacyLevel") "PUBLIC"))
-    (dissoc "privacyLevel")))
+    (assoc "privacyLevel" (= (get properties "privacyLevel") "PUBLIC"))
+    (rename-keys {"projectType" "surveyGroupType" "privacyLevel" "public"})))
+
+(defn form
+  "Transformations for GAE Survey to Unilog Form"
+  [properties]
+    (rename-keys properties {"desc" "description" "surveyGroupId" "surveyId"}))
 
 (defn transform-event [kind properties]
   (case kind
     "SurveyGroup" (survey properties)
-    "default" properties))
+    "Survey" (form properties)
+    properties))

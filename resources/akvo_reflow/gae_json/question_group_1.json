@@ -1,0 +1,42 @@
+{
+  "orgId": "akvoflowsandbox",
+  "entity": {
+    "key": {
+      "name": null,
+      "parent": null,
+      "id": 44793003,
+      "appId": "s~akvoflowsandbox",
+      "complete": true,
+      "kind": "QuestionGroup",
+      "namespace": ""
+    },
+    "parent": null,
+    "appId": "s~akvoflowsandbox",
+    "kind": "QuestionGroup",
+    "namespace": "",
+    "properties": {
+      "lastUpdateUserId": null,
+      "desc": null,
+      "ancestorIds": null,
+      "order": 1,
+      "status": "READY",
+      "name": "New group - please change name",
+      "repeatable": false,
+      "createdDateTime": 1465912291758,
+      "path": "My survey 1/Some new form",
+      "lastUpdateDateTime": 1465912291758,
+      "code": "New group - please change name",
+      "surveyId": 40993004,
+      "createUserId": null
+    }
+  },
+  "context": {
+    "timestamp": 1465912291758,
+    "source": {
+      "id": 1554002,
+      "email": "ivan@akvo.org",
+      "type": "USER"
+    }
+  },
+  "eventType": "questionGroupCreated"
+}
