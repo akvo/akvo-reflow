@@ -10,14 +10,14 @@
    "PROJECT_FOLDER" "FOLDER"})
 
 (def deprecated-props
-  {"SurveyGroup" #{"path"}
-   "Survey" #{"translationMap" "sector" "quesitonGroupMap" "instanceCount" "path"}
-   "QuestionGroup" #{"questionMap" "translationMap"}
-   "Question" #{"translationMap" "questionOptionMap" "questionHelpMediaMap" "path" "scoringRules"}
-   "DeviceFiles" #{}
-   "SurveyedLocale" #{"ambiguos" "surveyalValues"}
-   "SurveyInstance" #{"questionAnswerStore" "approximateLocationFlag"}
-   "QuestionAnswerStore" #{"strength" "scoredValue" }})
+  {"SurveyGroup" #{"createUserId" "lastUpdateUserId" "path"}
+   "Survey" #{"createUserId" "lastUpdateUserId" "sector" "path"}
+   "QuestionGroup" #{"createUserId" "lastUpdateUserId"}
+   "Question" #{"createUserId" "lastUpdateUserId" "path"}
+   "DeviceFiles" #{"createUserId" "lastUpdateUserId"}
+   "SurveyedLocale" #{"createUserId" "lastUpdateUserId"}
+   "SurveyInstance" #{"createUserId" "lastUpdateUserId"}
+   "QuestionAnswerStore" #{"createUserId" "lastUpdateUserId" "strength" "scoredValue" }})
 
 
 (defn parse [json]
