@@ -5,10 +5,10 @@
     [clojure.test :refer :all]))
 
 (def survey-group-sample
-  (slurp "test/akvo_reflow/survey_group_sample.json"))
+  (slurp "resources/akvo_reflow/gae_json/survey_group_sample.json"))
 
 (def survey-sample-1
-  (slurp "test/akvo_reflow/survey_sample_1.json"))
+  (slurp "resources/akvo_reflow/gae_json/survey_sample_1.json"))
 
 (deftest events
   []
