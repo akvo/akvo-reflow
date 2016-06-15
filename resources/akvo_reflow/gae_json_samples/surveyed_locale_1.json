@@ -1,0 +1,54 @@
+{
+  "orgId": "akvoflowsandbox",
+  "entity": {
+    "key": {
+      "name": null,
+      "parent": null,
+      "id": 37663003,
+      "appId": "s~akvoflowsandbox",
+      "complete": true,
+      "kind": "SurveyedLocale",
+      "namespace": ""
+    },
+    "parent": null,
+    "appId": "s~akvoflowsandbox",
+    "kind": "SurveyedLocale",
+    "namespace": "",
+    "properties": {
+      "sublevel6": null,
+      "sublevel4": null,
+      "sublevel5": null,
+      "organization": "Akvo",
+      "lastSurveyalInstanceId": null,
+      "longitude": null,
+      "lastSurveyedDate": null,
+      "sublevel3": null,
+      "sublevel2": null,
+      "sublevel1": null,
+      "createUserId": null,
+      "ancestorIds": null,
+      "surveyInstanceContrib": null,
+      "creationSurveyId": null,
+      "countryCode": null,
+      "lastUpdateDateTime": 1465912476087,
+      "currentStatus": null,
+      "ambiguous": false,
+      "lastUpdateUserId": null,
+      "createdDateTime": 1465912476087,
+      "geocells": null,
+      "latitude": null,
+      "displayName": null,
+      "localeType": "PUBLIC",
+      "systemIdentifier": null,
+      "identifier": "42v1-jyvd-he9s",
+      "surveyGroupId": 42083002
+    }
+  },
+  "context": {
+    "timestamp": 1465912476087,
+    "source": {
+      "type": "SYSTEM"
+    }
+  },
+  "eventType": "dataPointCreated"
+}

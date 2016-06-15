@@ -6,7 +6,7 @@
 
 (def event-samples
   [{:event-type "SurveyGroup"
-    :samples [{:file-name "survey_group_sample_1.json"
+    :samples [{:file-name "survey_group_1.json"
                :expected-result {"parentId" 0,
                                  "newLocaleSurveyId" nil,
                                  "defaultLanguageCode" "en",
@@ -20,7 +20,7 @@
                                  "monitoringGroup" false,
                                  "code" "One two three",
                                  "description" ""}}
-              {:file-name "survey_group_sample_2.json"
+              {:file-name "survey_group_2.json"
                :expected-result {"parentId" 0,
                                  "newLocaleSurveyId" nil,
                                  "defaultLanguageCode" "en",
@@ -115,11 +115,38 @@
                                  "processingMessageText" nil
                                  "status" nil
                                  "surveyInstanceId" 40283002
-                                 "uploadDateTime" 1465912475756}}]}])
+                                 "uploadDateTime" 1465912475756}}]}
+   {:event-type "SurveyedLocale"
+    :samples [{:file-name "surveyed_locale_1.json"
+               :expected-result {"ambiguous" false
+                                 "ancestorIds" nil
+                                 "countryCode" nil
+                                 "createdDateTime" 1465912476087
+                                 "creationSurveyId" nil
+                                 "currentStatus" nil
+                                 "displayName" nil
+                                 "geocells" nil
+                                 "identifier" "42v1-jyvd-he9s"
+                                 "lastSurveyalInstanceId" nil
+                                 "lastSurveyedDate" nil
+                                 "lastUpdateDateTime" 1465912476087
+                                 "latitude" nil
+                                 "localeType" "PUBLIC"
+                                 "longitude" nil
+                                 "organization" "Akvo"
+                                 "sublevel1" nil
+                                 "sublevel2" nil
+                                 "sublevel3" nil
+                                 "sublevel4" nil
+                                 "sublevel5" nil
+                                 "sublevel6" nil
+                                 "surveyGroupId" 42083002
+                                 "surveyInstanceContrib" nil
+                                 "systemIdentifier" nil}}]}])
 
 (defn transform-sample
   [sample]
-  (let [file (str "resources/akvo_reflow/gae_json/" sample)
+  (let [file (str "resources/akvo_reflow/gae_json_samples/" sample)
         data (parse (slurp file))
         event-properties (event-properties data)
         kind (kind data)]
@@ -132,5 +159,4 @@
       (doseq [sample (:samples event)]
         (is (=
           (transform-sample (:file-name sample))
-          (:expected-result sample)
-          ))))))
+          (:expected-result sample)))))))
