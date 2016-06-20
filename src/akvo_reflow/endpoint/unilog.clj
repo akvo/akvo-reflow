@@ -1,4 +1,4 @@
-(ns akvo-reflow.endpoint.example
+(ns akvo-reflow.endpoint.unilog
   (:require [compojure.core :refer :all]
             [clojure.java.io :as io]))
 

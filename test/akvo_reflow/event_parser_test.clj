@@ -173,7 +173,7 @@
                                  "uuid" "d3f64886-9004-4bbd-afea-98776ff33bff"}}]}
    {:event-type "QuestionAnswerStore"
     :samples [{:file-name "question_answer_store_1.json"
-               :expected-result {"questionID" 42953002
+               :expected-result {"questionId" 42953002
                                  "lastUpdateDateTime" 1465912476556
                                  "createdDateTime" 1465912476556
                                  "value" "[{\"text\":\"Option 2\",\"code\":\"02\"}]"

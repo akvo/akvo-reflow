@@ -107,7 +107,8 @@
     (dissoc "valueText")
     (rename-keys {"surveyInstanceId" "formInstanceId"
                   "type" "answerType"
-                  "surveyId" "formId"})))
+                  "surveyId" "formId"
+                  "questionID" "questionId"})))
 
 (defn transform-event [kind properties]
   (case kind
