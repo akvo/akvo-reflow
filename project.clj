@@ -36,6 +36,7 @@
                                   [eftest "0.1.1"]
                                   [kerodon "0.7.0"]]
                    :source-paths ["dev"]
+                   :resource-paths ["test/resources"]
                    :repl-options {:init-ns user}
                    :env {:port "3000"}
                    :plugins [[com.jakemccrary/lein-test-refresh "0.15.0"]]}

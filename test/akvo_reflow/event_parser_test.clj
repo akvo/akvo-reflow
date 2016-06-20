@@ -2,6 +2,7 @@
   (:require
     [akvo-reflow.event-parser :refer
      [drop-deprecated-props event-properties kind parse transform-event]]
+    [clojure.java.io :as io]
     [clojure.test :refer :all]))
 
 (def event-samples
@@ -35,7 +36,7 @@
                                  "code" "One two three",
                                  "description" ""}}]}
    {:event-type "Survey"
-    :samples [{:file-name "survey_sample_1.json"
+    :samples [{:file-name "survey_1.json"
                :expected-result {"ancestorIds" [0
                                                 42063003
                                                 42083002]
@@ -186,7 +187,7 @@
 
 (defn transform-sample
   [sample]
-  (let [file (str "resources/akvo_reflow/gae_json_samples/" sample)
+  (let [file (io/resource (str "akvo_reflow/gae_json_samples/" sample))
         data (parse (slurp file))
         event-properties (event-properties data)
         kind (kind data)]
