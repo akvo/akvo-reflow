@@ -9,7 +9,7 @@
             [ring.component.jetty :refer [jetty-server]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [akvo-reflow.endpoint
-             [example :as example]
+             [unilog :as unilog]
              [gae :as gae]]))
 
 (def base-config
@@ -24,10 +24,10 @@
          :app  (handler-component (:app config))
          :http (jetty-server (:http config))
          :db   (hikaricp (:db config))
-         :example (endpoint-component example/endpoint)
+         :unilog (endpoint-component unilog/endpoint)
          :gae (endpoint-component gae/endpoint))
         (component/system-using
          {:http [:app]
-          :app  [:example :gae]
-          :example [:db]
+          :app  [:unilog :gae]
+          :unilog [:db]
           :gae [:db]}))))
