@@ -3,7 +3,8 @@
 CREATE TABLE IF NOT EXISTS events (
     id serial,
     payload jsonb,
-    created_at timestamptz DEFAULT now()
+    created_at timestamptz DEFAULT now(),
+    processed boolean DEFAULT FALSE
 );
 
 -- :name drop-table-events :! :raw
