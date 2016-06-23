@@ -1,5 +1,5 @@
 (defproject akvo-reflow "0.1.0-SNAPSHOT"
-  :description "GAE-FLOW transformation service"
+  :description "GAE-Flow transformation service"
   :url "https://github.com/akvo/akvo-reflow"
   :min-lein-version "2.0.0"
   :dependencies [[clj-http "2.2.0"]
@@ -15,9 +15,8 @@
                  [org.clojure/clojure "1.8.0"]
                  [org.postgresql/postgresql "9.4.1208"]
                  [ragtime "0.5.3"]
-                 [ring "1.4.0"]
-                 [ring/ring-defaults "0.2.0"]
-                 [ring/ring-mock "0.3.0"]
+                 [ring/ring-core "1.5.0"]
+                 [ring/ring-defaults "0.2.1"]
                  [ring-jetty-component "0.3.1"]]
   :plugins [[lein-environ "1.0.3"]]
   :main ^:skip-aot akvo-reflow.main
@@ -32,6 +31,8 @@
    :profiles/test {:env {:database-url "jdbc:postgresql://localhost/test_reflow"}}
    :project/dev   {:dependencies [[duct/generate "0.6.1"]
                                   [reloaded.repl "0.2.1"]
+                                  [ring/ring-devel "1.5.0"]
+                                  [ring/ring-mock "0.3.0"]
                                   [org.clojure/tools.namespace "0.2.11"]
                                   [org.clojure/tools.nrepl "0.2.12"]
                                   [eftest "0.1.1"]
