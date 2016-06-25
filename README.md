@@ -1,4 +1,4 @@
-# akvo-reflow
+# akvo-reflow [![Build Status](https://travis-ci.org/akvo/akvo-reflow.svg?branch=master)](https://travis-ci.org/akvo/akvo-reflow)
 
 FIXME: description
 
