@@ -2,7 +2,6 @@
   (:require
     [akvo-reflow.event-parser :refer
      [drop-deprecated-props event-properties kind parse transform-event]]
-    [dev :refer [db-uri]]
     [cheshire.core :refer [generate-string]]
     [clj-http.client :refer [post]]
     [hugsql.core]))
@@ -18,9 +17,9 @@
   (post unilog-url {:body data}))
 
 (defn process-events
-  []
+  [db-uri]
   (doseq [data (unprocessed-events db-uri)]
-    (let [event (parse (:payload data))
+    (let [event (:payload data)
           event-properties (event-properties event)
           kind (kind event)
           transform (transform-event kind (drop-deprecated-props kind event-properties))

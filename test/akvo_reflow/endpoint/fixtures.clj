@@ -14,4 +14,5 @@
   (try
     (migrate/migrate test-db-uri)
     (f)
-    (migrate/rollback test-db-uri)))
+    (migrate/rollback test-db-uri)
+    ))

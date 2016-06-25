@@ -7,3 +7,9 @@ RETURNING *;
 -- :name all-events :? :*
 -- :doc All events.
 SELECT * FROM events;
+
+-- :name processed-events :? :*
+-- :doc Get all processed events
+SELECT id, payload
+    FROM events
+    WHERE processed = TRUE;

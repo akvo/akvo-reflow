@@ -1,12 +1,28 @@
 (ns akvo-reflow.unilogger-test
   (:require
-    [akvo-reflow.unilogger :refer [post-event process-events]]
+    [akvo-reflow.endpoint.fixtures :refer [system-fixture]]
+    [akvo-reflow.unilogger :refer [process-events post-event]]
+    [akvo-reflow.utils :refer [get-json-sample]]
     [clojure.test :refer :all]
-    [user :refer [dev]]
-    [reloaded.repl :refer [go stop]]))
+    [dev :refer [test-db-uri]]
+    [hugsql.core :as hugsql]))
+
+(hugsql/def-db-fns "akvo_reflow/endpoint/gae.sql")
+
+(use-fixtures :once system-fixture)
+
+(def event-samples
+  ["survey_group_1.json" "survey_group_2.json"])
 
 (deftest unilogger
          []
-         (dev)
-         (go)
-         (println (process-events)))
+         ; create some unprocessed even ts
+         (doseq [sample event-samples]
+           (insert-event
+             test-db-uri
+             {:payload (slurp (get-json-sample sample))}))
+         (with-redefs [post-event (fn [data] {:status 200})] (process-events test-db-uri))
+         (is
+           (=
+             (count event-samples )
+             (count (processed-events  test-db-uri)))))

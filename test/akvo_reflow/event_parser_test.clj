@@ -2,6 +2,7 @@
   (:require
     [akvo-reflow.event-parser :refer
      [drop-deprecated-props event-properties kind parse transform-event]]
+    [akvo-reflow.utils :refer [get-json-sample]]
     [clojure.java.io :as io]
     [clojure.test :refer :all]))
 
@@ -187,8 +188,7 @@
 
 (defn transform-sample
   [sample]
-  (let [file (io/resource (str "akvo_reflow/gae_json_samples/" sample))
-        data (parse (slurp file))
+  (let [data (parse (slurp (get-json-sample sample)))
         event-properties (event-properties data)
         kind (kind data)]
           (transform-event kind (drop-deprecated-props kind event-properties))))
