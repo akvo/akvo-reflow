@@ -15,14 +15,15 @@
   ["survey_group_1.json" "survey_group_2.json"])
 
 (deftest unilogger
-         []
-         ; create some unprocessed even ts
-         (doseq [sample event-samples]
-           (insert-event
-             test-db-uri
-             {:payload (slurp (get-json-sample sample))}))
-         (with-redefs [post-event (fn [data] {:status 200})] (process-events test-db-uri))
-         (is
-           (=
-             (count event-samples )
-             (count (processed-events  test-db-uri)))))
+  []
+  ; create some unprocessed events
+  (doseq [sample event-samples]
+    (insert-event
+      test-db-uri
+      {:payload (slurp (get-json-sample sample))}))
+  (testing "mark as processed after successful post"
+    (with-redefs [post-event (fn [data] {:status 200})] (process-events test-db-uri))
+    (is
+      (=
+        (count event-samples )
+        (count (processed-events  test-db-uri))))))
