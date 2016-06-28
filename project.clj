@@ -4,6 +4,7 @@
   :min-lein-version "2.0.0"
   :dependencies [[clj-http "2.2.0"]
                  [cheshire "5.5.0"]
+                 [com.fasterxml.jackson.core/jackson-databind "2.5.3"]
                  [com.layerware/hugsql "0.4.7"]
                  [com.stuartsierra/component "0.3.1"]
                  [compojure "1.5.0"]
