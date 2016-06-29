@@ -1,7 +1,7 @@
 (ns akvo-reflow.config
   (:require [akvo.commons.config :refer [get-config]]
             [environ.core :refer [env]]
-            [me.raynes.fs :refer [find-files]])
+            [me.raynes.fs :refer [find-files exists?]])
   (:import java.io.File))
 
 (def defaults
@@ -15,17 +15,18 @@
 (defn- index-by
   "Helper function similar to group-by but with a
   single value instead of a vector"
-  [f coll]
-  (let [reduce-fn (fn [m k v]
-                    (assoc m k (first v)))]
-    (reduce-kv reduce-fn {} (group-by f coll))))
+  [key-fn coll]
+  (reduce (fn [m val]
+            (assoc m (key-fn val) val))
+          {}
+          coll))
 
 (defn get-flow-config
   "Returns a map {\"app-id\" {config}}"
   [flow-server-config]
-  {:pre [(and (not (nil? flow-server-config))
-              (not-empty flow-server-config)
-              (.exists (File. flow-server-config)))]}
+  {:pre [(not (nil? flow-server-config))
+         (not-empty flow-server-config)
+         (exists? flow-server-config)]}
   (->> #"appengine-web.xml"
          (find-files flow-server-config)
          (map get-config)
