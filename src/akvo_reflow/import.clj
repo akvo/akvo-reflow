@@ -3,8 +3,7 @@
             [akvo.commons.gae.query :as q]
             [hugsql.core :as hugsql])
   (:import [org.postgresql.util PGobject PSQLException]
-           com.fasterxml.jackson.databind.ObjectMapper
-           java.util.Date))
+           com.fasterxml.jackson.databind.ObjectMapper))
 
 (def object-mapper (ObjectMapper.))
 
@@ -30,7 +29,7 @@
 (defn insert-entities
   [db-spec table-name entities]
   (doseq [e entities]
-    (let [created-datetime (cast Date (.getProperty e "createdDateTime"))
+    (let [created-datetime (.getProperty e "createdDateTime")
           created-at (if (nil? created-datetime) 0 (.getTime created-datetime))]
       (try
         (insert-entity db-spec {:table-name table-name
