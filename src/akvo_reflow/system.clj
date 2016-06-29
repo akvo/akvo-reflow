@@ -8,6 +8,7 @@
             [meta-merge.core :refer [meta-merge]]
             [ring.component.jetty :refer [jetty-server]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
+            [akvo-reflow.config :refer [get-flow-config]]
             [akvo-reflow.endpoint
              [unilog :as unilog]
              [gae :as gae]]))
@@ -25,9 +26,11 @@
          :http (jetty-server (:http config))
          :db   (hikaricp (:db config))
          :unilog (endpoint-component unilog/endpoint)
-         :gae (endpoint-component gae/endpoint))
+         :gae (endpoint-component gae/endpoint)
+         :flow-config (get-flow-config (:flow-server-config config)))
         (component/system-using
          {:http [:app]
           :app  [:unilog :gae]
           :unilog [:db]
-          :gae [:db]}))))
+          :gae [:db]
+          :db [:flow-config]}))))
