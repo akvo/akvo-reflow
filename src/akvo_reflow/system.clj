@@ -10,7 +10,9 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [akvo-reflow.endpoint
              [unilog :as unilog]
-             [gae :as gae]]))
+             [gae :as gae]
+             [webhook :as webhook]]
+            [akvo-reflow.component.flow-config :refer [flow-config]]))
 
 (def base-config
   {:app {:middleware [[wrap-not-found :not-found]
@@ -25,9 +27,12 @@
          :http (jetty-server (:http config))
          :db   (hikaricp (:db config))
          :unilog (endpoint-component unilog/endpoint)
-         :gae (endpoint-component gae/endpoint))
+         :gae (endpoint-component gae/endpoint)
+         :webhook (endpoint-component webhook/endpoint)
+         :flow-config (flow-config (get-in config [:flow-config :path])))
         (component/system-using
          {:http [:app]
-          :app  [:unilog :gae]
+          :app  [:unilog :gae :webhook]
           :unilog [:db]
-          :gae [:db]}))))
+          :gae [:db :flow-config]
+          :webhook [:flow-config]}))))

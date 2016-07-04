@@ -8,10 +8,11 @@
 (hugsql.core/def-db-fns "akvo_reflow/endpoint/gae.sql")
 
 
-(defn endpoint [{{db_uri :uri} :db}]
+(defn endpoint [{{db_uri :uri} :db {instances :flow-instances} :flow-config}]
   (context "/gae" []
 
-    (GET "/" [] "Hello World")
+    (GET "/" []
+      instances)
 
     (POST "/" []
       (fn [{:keys [:body ]}]
