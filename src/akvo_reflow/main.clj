@@ -17,7 +17,7 @@
               config/environ
               prod-config))
 
-(def ^:private system nil)
+(defonce ^:private system nil)
 
 (defn reload-flow-config []
   (alter-var-root #'system
