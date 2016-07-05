@@ -2,7 +2,7 @@
   (:require [akvo.commons.gae :as gae]
             [akvo.commons.gae.query :as q]
             [hugsql.core :as hugsql])
-  (:import [org.postgresql.util PGobject PSQLException]
+  (:import [org.postgresql.util PGobject]
            com.fasterxml.jackson.databind.ObjectMapper))
 
 (def object-mapper (ObjectMapper.))
@@ -35,32 +35,33 @@
         (insert-entity db-spec {:table-name table-name
                                 :created-at created-at
                                 :payload (entity->jsonb e)})
-        (catch PSQLException e
+        (catch Exception e
           (.printStackTrace e))))))
 
 (defn datastore-spec [config]
   (assoc (select-keys config [:service-account-id :private-key-file])
-         :hostname (str (:org-id config) ".appspot.com")
+         :hostname (:domain config)
          :port 443))
 
 (defn first-event-created-datetime
   [ds]
-  (let [q-first-event (.prepare ds (q/query {:kind "EventQueue"
-                                             :sort-by "createdDateTime"}))
-        first-event (first (.asList q-first-event (q/fetch-options {:limit 1})))]
-    (.getProperty first-event "createdDateTime")))
+  (let [first-event (first (q/result ds
+                                     {:kind "EventQueue"
+                                      :sort-by "createdDateTime"}
+                                     {:limit 1}))]
+    (when first-event
+      (.getProperty first-event "createdDateTime"))))
 
 (defn fetch-and-store-entities
   [db-spec config]
   (gae/with-datastore [ds (datastore-spec config)]
-    (let [t0 (first-event-created-datetime ds)]
+    (let [t0 (or (first-event-created-datetime ds)
+                 (java.util.Date.))]
       (doseq [kind (keys kinds)]
-        (let [q-entities (.prepare ds (q/query {:kind kind
-                                                :filter (q/< "createdDateTime" t0)
-                                                :sort-by "createdDateTime"}))
-              fetch-opts (q/fetch-options {:limit batch-size})
-              result (.asQueryResultList q-entities fetch-opts)
-              schema-name (:org-id config)
+        (let [query {:kind kind
+                     :filter (q/< "createdDateTime" t0)
+                     :sort-by "createdDateTime"}
+              schema-name (:app-id config)
               table (get kinds kind)
               table-name (format "%s.%s" schema-name table)
               index-name (format "%s_payload_unique" table)]
@@ -69,11 +70,9 @@
           (new-table db-spec {:table-name table-name})
           (new-index db-spec {:index-name index-name :table-name table-name})
 
-          (loop [query-result result]
+          (loop [query-result (q/result ds query {:limit batch-size})]
             (when-not (empty? query-result)
-              (insert-entities db-spec table-name query-result)
-              (let [cursor (.getCursor query-result)
-                    fetch-opts (q/fetch-options {:limit batch-size
-                                                 :start-cursor cursor})
-                    next-batch (.asQueryResultList q-entities fetch-opts)]
-                (recur next-batch)))))))))
+              (let [iter (.iterator query-result)]
+                (insert-entities db-spec table-name (iterator-seq iter))
+                (recur (q/result ds query {:limit batch-size
+                                           :start-cursor (.getCursor iter)}))))))))))

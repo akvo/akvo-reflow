@@ -8,5 +8,6 @@
    (POST "/" []
      (let [pull (shell/with-sh-dir (:flow-server-config main/config) ;; FIXME
                   (shell/sh "git" "pull"))]
-       (when (zero? (:exit pull))
-         (main/reload-flow-config))))))
+       (if (zero? (:exit pull))
+         (main/reload-flow-config)
+         (prn (:err pull)))))))

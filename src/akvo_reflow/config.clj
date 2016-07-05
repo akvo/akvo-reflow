@@ -28,6 +28,6 @@
          (not-empty flow-server-config)
          (exists? flow-server-config)]}
   (->> #"appengine-web.xml"
-         (find-files flow-server-config)
-         (map get-config)
-         (index-by :app-id)))
+       (find-files flow-server-config)
+       (map get-config)
+       (index-by :app-id)))
