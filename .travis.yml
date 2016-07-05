@@ -4,10 +4,12 @@ language:
 jdk:
 - oraclejdk8
 
+cache:
+  directories:
+  - $HOME/.m2
+
 addons:
   postgresql: "9.4"
-
-lein: lein2
 
 sudo: false
 
@@ -15,4 +17,4 @@ before_install:
 - ./provision/setup.sh
 
 script:
-- lein2 do clean, check, test
+- lein do clean, check, test
