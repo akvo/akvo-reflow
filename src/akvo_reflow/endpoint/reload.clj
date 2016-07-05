@@ -9,4 +9,4 @@
      (let [pull (shell/with-sh-dir (:flow-server-config main/config) ;; FIXME
                   (shell/sh "git" "pull"))]
        (when (zero? (:exit pull))
-         (reload-flow-config))))))
+         (main/reload-flow-config))))))
