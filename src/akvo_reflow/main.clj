@@ -17,9 +17,19 @@
               config/environ
               prod-config))
 
+(def ^:private system nil)
+
+(defn reload-flow-config []
+  (alter-var-root #'system
+                  (fn [s]
+                    (component/update-system s
+                                             [:flow-config]
+                                             (fn [c]
+                                               (config/get-flow-config (:flow-server-config config)))))))
+
 (defn -main [& args]
-  (let [system (new-system config)]
-    (println "Starting HTTP server on port" (-> system :http :port))
-    (add-shutdown-hook ::stop-system #(component/stop system))
-    (migrate/migrate {:connection-uri (-> config :db :uri)})
-    (component/start system)))
+  (alter-var-root #'system (constantly (new-system config)))
+  (println "Starting HTTP server on port" (-> system :http :port))
+  (add-shutdown-hook ::stop-system #(component/stop system))
+  (migrate/migrate {:connection-uri (-> config :db :uri)})
+  (component/start system))
