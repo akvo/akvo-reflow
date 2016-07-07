@@ -15,6 +15,9 @@ sudo: false
 
 before_install:
 - ./provision/setup.sh
+- mkdir -p $HOME/.lein
+- echo '{:user {:plugins [[jonase/eastwood "0.2.3"]]}}' > $HOME/.lein/profiles.clj
+
 
 script:
-- lein do clean, check, test
+- lein do clean, check, test :all, eastwood '{:source-paths ["src" "test"]}'
