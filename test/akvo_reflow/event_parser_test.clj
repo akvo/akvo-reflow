@@ -194,7 +194,6 @@
           (transform-event kind (drop-deprecated-props kind event-properties))))
 
 (deftest events
-  []
   (doseq [event event-samples]
     (testing (:event-type event)
       (doseq [sample (:samples event)]

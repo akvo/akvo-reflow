@@ -17,7 +17,6 @@
 (use-fixtures :once system-fixture)
 
 (deftest ^:functional gae
-  []
   (let [some-json "{\"foo\":\"bar\"}"]
 
     (testing "post json"

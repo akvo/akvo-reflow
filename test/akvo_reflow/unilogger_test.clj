@@ -15,7 +15,6 @@
   ["survey_group_1.json" "survey_group_2.json"])
 
 (deftest unilogger
-  []
   ; create some unprocessed events
   (doseq [sample event-samples]
     (insert-event
