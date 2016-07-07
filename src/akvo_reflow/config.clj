@@ -23,8 +23,8 @@
 (defn get-flow-config
   "Returns a map {\"app-id\" {config}}"
   [flow-server-config]
-  {:pre [(not-empty flow-server-config)
-         (exists? flow-server-config)]}
+  ;{:pre [(not-empty flow-server-config)
+  ;       (exists? flow-server-config)]}
   (->> #"appengine-web.xml"
        (find-files flow-server-config)
        (map get-config)
