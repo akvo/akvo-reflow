@@ -1,0 +1,78 @@
+(ns akvo-reflow.import
+  (:require [akvo.commons.gae :as gae]
+            [akvo.commons.gae.query :as q]
+            [hugsql.core :as hugsql])
+  (:import [org.postgresql.util PGobject]
+           com.fasterxml.jackson.databind.ObjectMapper))
+
+(def object-mapper (ObjectMapper.))
+
+(def batch-size 300)
+
+(def kinds (array-map "SurveyGroup" "survey"
+                      "Survey" "form"
+                      "QuestionGroup" "question_group"
+                      "Question" "question"
+                      "DeviceFiles" "device_file"
+                      "SurveyedLocale" "data_point"
+                      "SurveyInstance" "form_instance"
+                      "QuestionAnswerStore" "answer"))
+
+(hugsql/def-db-fns "akvo_reflow/import.sql" {:quoting :ansi})
+
+(defn entity->jsonb
+  [entity]
+  (doto (PGobject.)
+    (.setType "jsonb")
+    (.setValue (.writeValueAsString object-mapper entity))))
+
+(defn insert-entities
+  [db-spec table-name entities]
+  (doseq [e entities]
+    (let [created-datetime (.getProperty e "createdDateTime")
+          created-at (if (nil? created-datetime) 0 (.getTime created-datetime))]
+      (try
+        (insert-entity db-spec {:table-name table-name
+                                :created-at created-at
+                                :payload (entity->jsonb e)})
+        (catch Exception e
+          (.printStackTrace e))))))
+
+(defn datastore-spec [config]
+  (assoc (select-keys config [:service-account-id :private-key-file])
+         :hostname (:domain config)
+         :port 443))
+
+(defn first-event-created-datetime
+  [ds]
+  (let [first-event (first (q/result ds
+                                     {:kind "EventQueue"
+                                      :sort-by "createdDateTime"}
+                                     {:limit 1}))]
+    (when first-event
+      (.getProperty first-event "createdDateTime"))))
+
+(defn fetch-and-store-entities
+  [db-spec config]
+  (gae/with-datastore [ds (datastore-spec config)]
+    (let [t0 (or (first-event-created-datetime ds)
+                 (java.util.Date.))]
+      (doseq [kind (keys kinds)]
+        (let [query {:kind kind
+                     :filter (q/< "createdDateTime" t0)
+                     :sort-by "createdDateTime"}
+              schema-name (:app-id config)
+              table (get kinds kind)
+              table-name (format "%s.%s" schema-name table)
+              index-name (format "%s_payload_unique" table)]
+
+          (new-schema db-spec {:schema-name schema-name})
+          (new-table db-spec {:table-name table-name})
+          (new-index db-spec {:index-name index-name :table-name table-name})
+
+          (loop [query-result (q/result ds query {:limit batch-size})]
+            (when-not (empty? query-result)
+              (let [iter (.iterator query-result)]
+                (insert-entities db-spec table-name (iterator-seq iter))
+                (recur (q/result ds query {:limit batch-size
+                                           :start-cursor (.getCursor iter)}))))))))))
