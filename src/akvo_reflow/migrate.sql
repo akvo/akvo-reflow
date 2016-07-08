@@ -1,10 +1,10 @@
 -- :name create-table-events :! :raw
 -- :doc Create the events table
 CREATE TABLE IF NOT EXISTS events (
-    id serial,
-    payload jsonb,
-    created_at timestamptz DEFAULT now(),
-    processed boolean DEFAULT FALSE
+    id serial PRIMARY KEY,
+    payload jsonb NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    processed boolean NOT NULL DEFAULT FALSE
 );
 
 -- :name drop-table-events :! :raw

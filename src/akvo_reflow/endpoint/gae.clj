@@ -11,8 +11,6 @@
 (defn endpoint [{{db_uri :uri} :db}]
   (context "/gae" []
 
-    (GET "/" [] "Hello World")
-
     (POST "/" []
       (fn [{:keys [:body ]}]
         (let [body (json/generate-string (slurp body))]
