@@ -19,7 +19,8 @@
                  [ring/ring-core "1.5.0"]
                  [ring/ring-defaults "0.2.1"]
                  [ring-jetty-component "0.3.1"]
-                 [me.raynes/fs "1.4.6"]]
+                 [me.raynes/fs "1.4.6"]
+                 [org.clojure/java.jdbc "0.5.8"]]
   :plugins [[lein-environ "1.0.3"]]
   :main ^:skip-aot akvo-reflow.main
   :target-path "target/%s/"
