@@ -32,7 +32,8 @@
         {}))
 
 (defn migrate []
-  (migrate/migrate {:connection-uri (-> config :db :uri)}))
+  (go)
+  (migrate/migrate reloaded.repl/system))
 
 (when (io/resource "local.clj")
   (load "local"))
