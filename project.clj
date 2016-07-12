@@ -10,6 +10,7 @@
                  [compojure "1.5.0"]
                  [duct "0.6.1"]
                  [duct/hikaricp-component "0.1.0"]
+                 [duct/ragtime-component "0.1.4"]
                  [environ "1.0.3"]
                  [meta-merge "0.1.1"]
                  [org.akvo/commons "0.4.4-SNAPSHOT"]

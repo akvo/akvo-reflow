@@ -31,5 +31,5 @@
   (alter-var-root #'system (constantly (new-system config)))
   (println "Starting HTTP server on port" (-> system :http :port))
   (add-shutdown-hook ::stop-system #(component/stop system))
-  (migrate/migrate {:connection-uri (-> config :db :uri)})
-  (component/start system))
+  (alter-var-root #'system component/start)
+  (migrate/migrate system))
