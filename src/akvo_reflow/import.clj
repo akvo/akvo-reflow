@@ -71,13 +71,3 @@
                   (insert-entities conn table-name (iterator-seq iter))
                   (recur (q/result ds query {:limit batch-size
                                              :start-cursor (.getCursor iter)})))))))))))
-
-(comment
-
-  (def sandbox {:app-id "akvoflowsandbox", :cartodb-sql-api nil, :s3bucket "akvoflowsandbox", :access-key "AKIAJ73CXGSMRTVHXFFQ", :apiKey "nk34aR11m9", :secret-key "GABRIEL", :alias "akvoflowsandbox.appspot.com", :private-key-file "/home/ivan/workspace/akvo/src/akvo-flow-server-config/akvoflowsandbox/akvoflowsandbox.p12", :domain "akvoflowsandbox.appspot.com", :service-account-id "account-1@akvoflowsandbox.iam.gserviceaccount.com", :cartodb-api-key nil})
-
-  (def kinds {"QuestionGroup" "question_group"})
-
-  (fetch-and-store-entities {:connection-uri "jdbc:postgresql://localhost/reflow?user=postgres"} sandbox)
-
-  )
