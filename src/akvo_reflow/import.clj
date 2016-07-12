@@ -1,6 +1,7 @@
 (ns akvo-reflow.import
   (:require [akvo.commons.gae :as gae]
             [akvo.commons.gae.query :as q]
+            [akvo-reflow.utils :refer [with-db-schema]]
             [hugsql.core :as hugsql])
   (:import [org.postgresql.util PGobject]
            com.fasterxml.jackson.databind.ObjectMapper))
@@ -56,23 +57,27 @@
   [db-spec config]
   (gae/with-datastore [ds (datastore-spec config)]
     (let [t0 (or (first-event-created-datetime ds)
-                 (java.util.Date.))]
-      (doseq [kind (keys kinds)]
-        (let [query {:kind kind
-                     :filter (q/< "createdDateTime" t0)
-                     :sort-by "createdDateTime"}
-              schema-name (:app-id config)
-              table (get kinds kind)
-              table-name (format "%s.%s" schema-name table)
-              index-name (format "%s_payload_unique" table)]
+                 (java.util.Date.))
+          schema-name (:app-id config)]
+      (with-db-schema [conn db-spec] schema-name
+        (doseq [kind (keys kinds)]
+          (let [query {:kind kind
+                       :filter (q/< "createdDateTime" t0)
+                       :sort-by "createdDateTime"}
+                table-name (get kinds kind)]
+            (loop [query-result (q/result ds query {:limit batch-size})]
+              (when-not (empty? query-result)
+                (let [iter (.iterator query-result)]
+                  (insert-entities conn table-name (iterator-seq iter))
+                  (recur (q/result ds query {:limit batch-size
+                                             :start-cursor (.getCursor iter)})))))))))))
 
-          (new-schema db-spec {:schema-name schema-name})
-          (new-table db-spec {:table-name table-name})
-          (new-index db-spec {:index-name index-name :table-name table-name})
+(comment
 
-          (loop [query-result (q/result ds query {:limit batch-size})]
-            (when-not (empty? query-result)
-              (let [iter (.iterator query-result)]
-                (insert-entities db-spec table-name (iterator-seq iter))
-                (recur (q/result ds query {:limit batch-size
-                                           :start-cursor (.getCursor iter)}))))))))))
+  (def sandbox {:app-id "akvoflowsandbox", :cartodb-sql-api nil, :s3bucket "akvoflowsandbox", :access-key "AKIAJ73CXGSMRTVHXFFQ", :apiKey "nk34aR11m9", :secret-key "GABRIEL", :alias "akvoflowsandbox.appspot.com", :private-key-file "/home/ivan/workspace/akvo/src/akvo-flow-server-config/akvoflowsandbox/akvoflowsandbox.p12", :domain "akvoflowsandbox.appspot.com", :service-account-id "account-1@akvoflowsandbox.iam.gserviceaccount.com", :cartodb-api-key nil})
+
+  (def kinds {"QuestionGroup" "question_group"})
+
+  (fetch-and-store-entities {:connection-uri "jdbc:postgresql://localhost/reflow?user=postgres"} sandbox)
+
+  )
