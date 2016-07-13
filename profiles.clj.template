@@ -1,5 +1,6 @@
 ;; Local profile overrides
 
-{:profiles/dev {:env {:database-url "jdbc:postgresql://localhost/reflow"}}
- :profiles/test {:env {:database-url "jdbc:postgresql://localhost/test_reflow"
+{:profiles/dev {:env {:database-url "jdbc:postgresql://localhost/reflow?user=reflow&password=password"
+                      :flow-server-config "./test/resources/flow"}}
+ :profiles/test {:env {:database-url "jdbc:postgresql://localhost/test_reflow?user=reflow&password=password"
                        :flow-server-config "./test/resources/flow"}}}
