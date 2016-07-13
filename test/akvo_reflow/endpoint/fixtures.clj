@@ -1,18 +1,28 @@
 (ns akvo-reflow.endpoint.fixtures
-  (:require
-    [akvo-reflow.migrate :as migrate]
-    [dev :refer [test-db-uri]]
-    [user :refer [dev]]
-    [meta-merge.core :refer [meta-merge]]
-    [reloaded.repl :refer [system init start stop go reset]]
-    [ring.middleware.stacktrace :refer [wrap-stacktrace]]))
+  (:require [akvo-reflow.config :refer [get-flow-config]]
+            [akvo-reflow.migrate :as migrate]
+            [com.stuartsierra.component :as component]
+            [dev :refer [test-db-uri]]
+            [duct.component.hikaricp :refer [hikaricp]]
+            [duct.component.ragtime :refer [ragtime]]))
 
+(defonce test-system nil)
+
+(defn new-test-system
+  []
+  (-> (component/system-map
+       :db (hikaricp {:uri (:connection-uri test-db-uri)})
+       :ragtime (ragtime {:resource-path "migrations"})
+       :flow-config (get-flow-config "test/resources/flow"))
+      (component/system-using
+       {:ragtime [:db]
+        :db [:flow-config]})))
 
 (defn system-fixture
-  "Migrate creates the events table."
   [f]
-  (try
-    (migrate/migrate test-db-uri)
-    (f)
-    (migrate/rollback test-db-uri)
-    ))
+  (alter-var-root #'test-system (constantly (new-test-system)))
+  (alter-var-root #'test-system component/start)
+  (migrate/migrate test-system)
+  (f)
+  (migrate/rollback test-system)
+  (alter-var-root #'test-system component/stop))

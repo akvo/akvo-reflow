@@ -15,4 +15,7 @@
         (ragtime/migrate (assoc migrations :datastore (ragtime-jdbc/sql-database conn)))))))
 
 (defn rollback [system]
-  )
+  (let [ds (select-keys (-> system :db :spec) [:datasource])]
+    (doseq [flow-instance (keys (:flow-config system))]
+      (prn (format "Processing: %s" flow-instance))
+      (jdbc/execute! ds (format "DROP SCHEMA IF EXISTS \"%s\" CASCADE" flow-instance)))))

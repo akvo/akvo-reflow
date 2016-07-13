@@ -1,31 +1,27 @@
 (ns akvo-reflow.endpoint.gae-test
-  (:require [akvo-reflow.endpoint.gae :as gae]
-            [akvo-reflow.endpoint.fixtures :refer [system-fixture]]
+  (:require [akvo-reflow.endpoint.fixtures :refer [system-fixture test-system]]
+            [akvo-reflow.endpoint.gae :as gae]
+            [akvo-reflow.utils :refer [with-db-schema]]
             [clojure.test :refer :all]
-            [dev :refer [test-db-uri]]
             [hugsql.core :as hugsql]
-            [meta-merge.core :refer [meta-merge]]
-            [ring.middleware.stacktrace :refer [wrap-stacktrace]]
             [ring.mock.request :as mock]))
 
 (hugsql/def-db-fns "akvo_reflow/endpoint/gae.sql")
 
-
-(def handler
-  (gae/endpoint {:db {:uri test-db-uri}}))
-
 (use-fixtures :once system-fixture)
 
 (deftest ^:functional gae
-  (let [some-json "{\"foo\":\"bar\"}"]
+  (let [handler (gae/endpoint test-system)
+        some-json "{\"foo\":\"bar\"}"
+        ds (select-keys (-> test-system :db :spec) [:datasource])]
 
     (testing "post json"
       (is (= (select-keys
-               (handler (mock/request :post "/gae/" (.getBytes some-json "UTF-8")))
-               [:status :headers])
+              (handler (mock/request :post "/gae/" (.getBytes some-json "UTF-8")))
+              [:status :headers])
              {:status 200
               :headers {"Content-Type" "text/html; charset=utf-8"}})))
 
     (testing "verify data"
-      (is (= (:payload (first (all-events test-db-uri)))
-             some-json)))))
+      (with-db-schema [conn ds] "akvoflowsandbox"
+        (is (= (:payload (first (all-events conn))) some-json))))))

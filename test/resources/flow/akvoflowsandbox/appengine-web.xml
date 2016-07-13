@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+    <application>akvoflowsandbox</application>
+    <version>1</version>
+    <sessions-enabled>true</sessions-enabled>
+    <threadsafe>true</threadsafe>
+    <auto-id-policy>legacy</auto-id-policy>
+    <static-files>
+        <include path="/**.png" expiration="1000d 5h" />
+        <include path="/**.jpg" expiration="1000d 5h" />
+    </static-files>
+    <!-- Configure java.util.logging -->
+    <system-properties>
+        <property name="alias" value="akvoflowsandbox.appspot.com" />
+        <property name="aws_secret_key" value="SECRET" />
+        <property name="aws_identifier" value="IDENTIFIER" />
+        <property name="s3bucket" value="BUCKET-NAME" />
+        <property name="restPrivateKey" value="REST-KEY"/>
+        <property name="serviceAccountId" value="SERVICE-ACCOUNT-ID"/>
+        <property name="hereMapsAppId" value="MAPS-KEY"/>
+        <property name="hereMapsAppCode" value="MAPS-CODE"/>
+	<property name="cartodbApiKey" value="API-KEY"/>
+	<property name="cartodbSqlApi" value="SQL-API"/>
+    </system-properties>
+</appengine-web-app>
