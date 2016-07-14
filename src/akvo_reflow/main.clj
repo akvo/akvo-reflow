@@ -6,26 +6,42 @@
             [com.stuartsierra.component :as component]
             [duct.middleware.errors :refer [wrap-hide-errors]]
             [duct.util.runtime :refer [add-shutdown-hook]]
-            [meta-merge.core :refer [meta-merge]]))
+            [meta-merge.core :refer [meta-merge]]
+            [buddy.auth.backends.httpbasic :refer [http-basic-backend]]
+            [buddy.auth.middleware :refer [wrap-authentication]]))
+
+(defonce ^:private system nil)
+
+(defn- authenticate
+  [request authdata]
+  (let [username (:username authdata)
+        password (:password authdata)
+        api-key (get-in system [:flow-config username :apiKey])]
+    (when (= password api-key)
+      username)))
 
 (def prod-config
-  {:app {:middleware     [[wrap-hide-errors :internal-error]]
-         :internal-error "Internal Server Error"}})
+  {:app {:middleware     [[wrap-hide-errors :internal-error]
+                          [wrap-authentication :auth-backend]]
+         :internal-error "Internal Server Error"
+         :auth-backend (http-basic-backend {:realm "Akvo"
+                                            :authfn authenticate})}})
 
 (def config
   (meta-merge config/defaults
               config/environ
               prod-config))
 
-(defonce ^:private system nil)
+(defn- reload-config
+  [component]
+  (config/get-flow-config (:flow-server-config config)))
+
+(defn- update-system
+  [system]
+  (component/update-system system [:flow-config] reload-config))
 
 (defn reload-flow-config []
-  (alter-var-root #'system
-                  (fn [s]
-                    (component/update-system s
-                                             [:flow-config]
-                                             (fn [c]
-                                               (config/get-flow-config (:flow-server-config config)))))))
+  (alter-var-root #'system update-system))
 
 (defn -main [& args]
   (alter-var-root #'system (constantly (new-system config)))

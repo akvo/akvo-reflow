@@ -20,7 +20,8 @@
                  [ring/ring-defaults "0.2.1"]
                  [ring-jetty-component "0.3.1"]
                  [me.raynes/fs "1.4.6"]
-                 [org.clojure/java.jdbc "0.5.8"]]
+                 [org.clojure/java.jdbc "0.5.8"]
+                 [buddy/buddy-auth "1.1.0"]]
   :plugins [[lein-environ "1.0.3"]]
   :main ^:skip-aot akvo-reflow.main
   :target-path "target/%s/"

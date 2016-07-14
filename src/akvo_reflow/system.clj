@@ -10,7 +10,6 @@
             [ring.component.jetty :refer [jetty-server]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [akvo-reflow.config :refer [get-flow-config]]
-            [akvo-reflow.utils :refer [with-db-schema]]
             [akvo-reflow.endpoint
              [unilog :as unilog]
              [gae :as gae]]))
