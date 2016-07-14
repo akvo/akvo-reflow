@@ -16,7 +16,6 @@
                  [org.akvo/commons "0.4.4-SNAPSHOT"]
                  [org.clojure/clojure "1.8.0"]
                  [org.postgresql/postgresql "9.4.1208"]
-                 [ragtime "0.5.3"]
                  [ring/ring-core "1.5.0"]
                  [ring/ring-defaults "0.2.1"]
                  [ring-jetty-component "0.3.1"]
