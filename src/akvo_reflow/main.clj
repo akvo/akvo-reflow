@@ -1,31 +1,21 @@
 (ns akvo-reflow.main
   (:gen-class)
-  (:require [akvo-reflow.config :as config]
-            [akvo-reflow.system :refer [new-system]]
+  (:require [akvo-reflow.auth :refer [wrap-basic-auth wrap-auth-required]]
+            [akvo-reflow.config :as config]
             [akvo-reflow.migrate :as migrate]
+            [akvo-reflow.system :refer [new-system]]
             [com.stuartsierra.component :as component]
             [duct.middleware.errors :refer [wrap-hide-errors]]
             [duct.util.runtime :refer [add-shutdown-hook]]
-            [meta-merge.core :refer [meta-merge]]
-            [buddy.auth.backends.httpbasic :refer [http-basic-backend]]
-            [buddy.auth.middleware :refer [wrap-authentication]]))
+            [meta-merge.core :refer [meta-merge]]))
 
 (defonce ^:private system nil)
 
-(defn- authenticate
-  [request authdata]
-  (let [username (:username authdata)
-        password (:password authdata)
-        api-key (get-in system [:flow-config username :apiKey])]
-    (when (= password api-key)
-      username)))
-
 (def prod-config
-  {:app {:middleware     [[wrap-hide-errors :internal-error]
-                          [wrap-authentication :auth-backend]]
-         :internal-error "Internal Server Error"
-         :auth-backend (http-basic-backend {:realm "Akvo"
-                                            :authfn authenticate})}})
+  {:app {:middleware ^:prepend [wrap-auth-required
+                                wrap-basic-auth
+                                [wrap-hide-errors :internal-error]]
+         :internal-error "Internal Server Error"}})
 
 (def config
   (meta-merge config/defaults

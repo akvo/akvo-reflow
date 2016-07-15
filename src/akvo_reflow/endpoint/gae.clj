@@ -1,7 +1,5 @@
 (ns akvo-reflow.endpoint.gae
   (:require [akvo-reflow.utils :refer [with-db-schema]]
-            [cheshire.core :as json]
-            [clojure.java.jdbc :as jdbc]
             [compojure.core :refer :all]
             [hugsql.core :as hugsql]
             [meta-merge.core :refer [meta-merge]]))
@@ -12,7 +10,6 @@
   (context "/gae" []
     (POST "/" []
       (fn [{:keys [:body]}]
-        (let [body (json/generate-string (slurp body))
-              ds (select-keys (-> db :spec) [:datasource])]
+        (let [ds (select-keys (-> db :spec) [:datasource])]
           (with-db-schema [conn ds] "akvoflowsandbox" ;; FIXME extract instance id from the payload
             (insert-event conn {:payload body})))))))
