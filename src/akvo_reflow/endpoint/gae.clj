@@ -10,6 +10,12 @@
   (context "/gae" []
     (POST "/" []
       (fn [{:keys [:body]}]
-        (let [ds (select-keys (-> db :spec) [:datasource])]
-          (with-db-schema [conn ds] "akvoflowsandbox" ;; FIXME extract instance id from the payload
-            (insert-event conn {:payload body})))))))
+        (if-let [org-id (get body "orgId")]
+          (let [ds (select-keys (-> db :spec) [:datasource])]
+            (with-db-schema [conn ds] org-id
+              (doseq [event (get body "events")]
+                (insert-event conn {:payload event})))
+            {:status 200
+             :body {:status "OK"}})
+          {:status 400
+           :body "orgId is required"})))))
