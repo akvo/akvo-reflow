@@ -14,7 +14,7 @@
 
 (deftest ^:functional gae
   (let [handler (-> (gae/endpoint test-system)
-                    (wrap-json-body :keywords? false)
+                    (wrap-json-body {:keywords? false})
                     (wrap-json-response))
         some-json (json/generate-string {:orgId "akvoflowsandbox"
                                          :events [{:id 1 :properties [{:name "prop1"}]}]})
@@ -32,5 +32,5 @@
       (with-db-schema [conn ds] "akvoflowsandbox"
         (let [evts (all-events conn)
               first-event (:payload (first evts))]
-          (is (= 1 (get first-event "id"))
-              (= [{"name" "prop1"}] (get first-event "properties"))))))))
+          (is (= 1 (get first-event "id")))
+          (is (= [{"name" "prop1"}] (get first-event "properties"))))))))
