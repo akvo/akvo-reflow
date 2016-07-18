@@ -4,6 +4,7 @@
             [akvo-reflow.endpoint
              [unilog :as unilog]
              [gae :as gae]]
+            [akvo-reflow.utils :refer [wrap-config]]
             [com.stuartsierra.component :as component]
             [duct.component.endpoint :refer [endpoint-component]]
             [duct.component.handler :refer [handler-component]]
@@ -15,11 +16,6 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :refer [wrap-json-body wrap-json-response]]))
 
-(defn wrap-config
-  [handler config]
-  (fn [req]
-    (handler (assoc req :config config))))
-
 (def base-config
   {:app {:middleware [[wrap-config :flow-config]
                       wrap-json-response
@@ -28,7 +24,7 @@
                       [wrap-defaults :defaults]]
          :not-found  "Resource Not Found"
          :defaults   (meta-merge api-defaults {})
-         :json-body [:keywords? false]}})
+         :json-body {:keywords? false}}})
 
 (defn new-system [config]
   (let [config (meta-merge base-config config)]

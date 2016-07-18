@@ -26,3 +26,10 @@
        ~@body
        (finally
          (jdbc/execute! ~db-conn (get-schema-sql) {:transaction? false})))))
+
+(defn wrap-config
+  "Calls handler with an extra :config key associated
+  in the request"
+  [handler config]
+  (fn [req]
+    (handler (assoc req :config config))))
