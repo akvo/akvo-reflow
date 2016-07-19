@@ -1,8 +1,7 @@
 (ns akvo-reflow.endpoint.gae
   (:require [akvo-reflow.utils :refer [with-db-schema]]
-            [compojure.core :refer :all]
-            [hugsql.core :as hugsql]
-            [meta-merge.core :refer [meta-merge]]))
+            [compojure.core :refer [context POST]]
+            [hugsql.core :as hugsql]))
 
 (hugsql/def-db-fns "akvo_reflow/endpoint/gae.sql")
 

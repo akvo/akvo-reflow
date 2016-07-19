@@ -1,9 +1,10 @@
 (ns akvo-reflow.system
   (:require [akvo.commons.psql-util]
-            [akvo-reflow.config :refer [get-flow-config]]
             [akvo-reflow.endpoint
              [unilog :as unilog]
-             [gae :as gae]]
+             [gae :as gae]
+             [reload :as reload]]
+            [akvo-reflow.component.flow-config :refer [flow-config]]
             [akvo-reflow.utils :refer [wrap-config]]
             [com.stuartsierra.component :as component]
             [duct.component.endpoint :refer [endpoint-component]]
@@ -29,17 +30,20 @@
 (defn new-system [config]
   (let [config (meta-merge base-config config)]
     (-> (component/system-map
+         :config config
          :app  (handler-component (:app config))
          :http (jetty-server (:http config))
          :db   (hikaricp (:db config))
-         :ragtime (ragtime {:resource-path "migrations"})
+         :migrations (ragtime {:resource-path "migrations"})
          :unilog (endpoint-component unilog/endpoint)
          :gae (endpoint-component gae/endpoint)
-         :flow-config (get-flow-config (:flow-server-config config)))
+         :flow-config (flow-config config)
+         :reload (endpoint-component reload/endpoint))
         (component/system-using
          {:http [:app]
-          :app  [:flow-config :ragtime :unilog :gae]
+          :app  [:flow-config :migrations :unilog :gae :reload]
           :unilog [:db]
           :gae [:db]
-          :ragtime [:db]
+          :migrations [:db]
+          :reload [:db :migrations :flow-config]
           :db [:flow-config]}))))

@@ -9,8 +9,6 @@
             [duct.util.runtime :refer [add-shutdown-hook]]
             [meta-merge.core :refer [meta-merge]]))
 
-(defonce ^:private system nil)
-
 (def prod-config
   {:app {:middleware ^:prepend [wrap-auth-required
                                 wrap-basic-auth
@@ -22,20 +20,10 @@
               config/environ
               prod-config))
 
-(defn- reload-config
-  [component]
-  (config/get-flow-config (:flow-server-config config)))
-
-(defn- update-system
-  [system]
-  (component/update-system system [:flow-config] reload-config))
-
-(defn reload-flow-config []
-  (alter-var-root #'system update-system))
-
 (defn -main [& args]
-  (alter-var-root #'system (constantly (new-system config)))
-  (println "Starting HTTP server on port" (-> system :http :port))
-  (add-shutdown-hook ::stop-system #(component/stop system))
-  (alter-var-root #'system component/start)
-  (migrate/migrate system))
+  (let [system (new-system config)]
+    (println "Starting HTTP server on port" (-> system :http :port))
+    (add-shutdown-hook ::stop-system #(component/stop system))
+    (-> system
+        component/start
+        migrate/migrate)))

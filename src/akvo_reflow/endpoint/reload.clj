@@ -1,13 +1,12 @@
 (ns akvo-reflow.endpoint.reload
-  (:require [akvo-reflow.main :as main]
-            [clojure.java.shell :as shell]
-            [compojure.core :refer [routes POST]]))
+  (:require [akvo-reflow.component.flow-config :refer [reload-config]]
+            [akvo-reflow.migrate :refer [migrate]]
+            [compojure.core :refer [context POST]]))
 
-(defn reload-endpoint [config]
-  (routes
+(defn endpoint [{:keys [flow-config] :as system}]
+  (context "/reload" []
    (POST "/" []
-     (let [pull (shell/with-sh-dir (:flow-server-config main/config) ;; FIXME
-                  (shell/sh "git" "pull"))]
-       (if (zero? (:exit pull))
-         (main/reload-flow-config)
-         (prn (:err pull)))))))
+     (let [cfg (reload-config flow-config)]
+       (migrate system)
+       {:status 200
+        :body "OK"}))))

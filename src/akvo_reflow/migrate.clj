@@ -5,17 +5,18 @@
             [duct.component.ragtime :as ragtime]
             [ragtime.jdbc :as ragtime-jdbc]))
 
-(defn migrate [system]
-  (let [ds (select-keys (-> system :db :spec) [:datasource])
-        migrations (:ragtime system)]
-    (doseq [flow-instance (keys (:flow-config system))]
+(defn migrate [{:keys [db migrations flow-config] :as system}]
+  (let [ds (select-keys (:spec db) [:datasource])]
+    (doseq [flow-instance (keys @(:config flow-config))]
       (prn (format "Processing: %s" flow-instance))
       (jdbc/execute! ds (format "CREATE SCHEMA IF NOT EXISTS \"%s\"" flow-instance))
       (with-db-schema [conn ds] flow-instance
-        (ragtime/migrate (assoc migrations :datastore (ragtime-jdbc/sql-database conn)))))))
+        (ragtime/migrate (assoc migrations :datastore (ragtime-jdbc/sql-database conn))))))
+  system)
 
-(defn rollback [system]
-  (let [ds (select-keys (-> system :db :spec) [:datasource])]
-    (doseq [flow-instance (keys (:flow-config system))]
+(defn rollback [{:keys [db flow-config] :as system}]
+  (let [ds (select-keys (:spec db) [:datasource])]
+    (doseq [flow-instance (keys @(:config flow-config))]
       (prn (format "Processing: %s" flow-instance))
-      (jdbc/execute! ds (format "DROP SCHEMA IF EXISTS \"%s\" CASCADE" flow-instance)))))
+      (jdbc/execute! ds (format "DROP SCHEMA IF EXISTS \"%s\" CASCADE" flow-instance))))
+  system)

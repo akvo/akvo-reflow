@@ -29,7 +29,8 @@
 
 (defn wrap-config
   "Calls handler with an extra :config key associated
-  in the request"
-  [handler config]
+  in the request. The second parameter is expected to be a
+  Component with a `:config` key holding the configuration map"
+  [handler cfg]
   (fn [req]
-    (handler (assoc req :config config))))
+    (handler (assoc req :config @(:config cfg)))))
