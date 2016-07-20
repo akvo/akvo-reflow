@@ -4,7 +4,7 @@
              [unilog :as unilog]
              [gae :as gae]
              [reload :as reload]]
-            [akvo-reflow.component.flow-config :refer [flow-config]]
+            [akvo-reflow.flow-config :refer [get-flow-config]]
             [akvo-reflow.utils :refer [wrap-config]]
             [com.stuartsierra.component :as component]
             [duct.component.endpoint :refer [endpoint-component]]
@@ -37,7 +37,7 @@
          :migrations (ragtime {:resource-path "migrations"})
          :unilog (endpoint-component unilog/endpoint)
          :gae (endpoint-component gae/endpoint)
-         :flow-config (flow-config config)
+         :flow-config (atom (get-flow-config config))
          :reload (endpoint-component reload/endpoint))
         (component/system-using
          {:http [:app]

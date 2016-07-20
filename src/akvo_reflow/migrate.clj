@@ -7,7 +7,7 @@
 
 (defn migrate [{:keys [db migrations flow-config] :as system}]
   (let [ds (select-keys (:spec db) [:datasource])]
-    (doseq [flow-instance (keys @(:config flow-config))]
+    (doseq [flow-instance (keys @flow-config)]
       (prn (format "Processing: %s" flow-instance))
       (jdbc/execute! ds (format "CREATE SCHEMA IF NOT EXISTS \"%s\"" flow-instance))
       (with-db-schema [conn ds] flow-instance
@@ -16,7 +16,7 @@
 
 (defn rollback [{:keys [db flow-config] :as system}]
   (let [ds (select-keys (:spec db) [:datasource])]
-    (doseq [flow-instance (keys @(:config flow-config))]
+    (doseq [flow-instance (keys @flow-config)]
       (prn (format "Processing: %s" flow-instance))
       (jdbc/execute! ds (format "DROP SCHEMA IF EXISTS \"%s\" CASCADE" flow-instance))))
   system)

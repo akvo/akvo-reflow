@@ -1,6 +1,6 @@
 (ns akvo-reflow.endpoint.fixtures
   (:require [akvo-reflow.migrate :as migrate]
-            [akvo-reflow.component.flow-config :refer [flow-config]]
+            [akvo-reflow.flow-config :refer [get-flow-config]]
             [com.stuartsierra.component :as component]
             [dev :refer [test-db-uri]]
             [duct.component.hikaricp :refer [hikaricp]]
@@ -13,7 +13,7 @@
   (-> (component/system-map
        :db (hikaricp {:uri (:connection-uri test-db-uri)})
        :migrations (ragtime {:resource-path "migrations"})
-       :flow-config (flow-config {:flow-server-config "test/resources/flow"}))
+       :flow-config (atom (get-flow-config {:flow-server-config "test/resources/flow"})))
       (component/system-using
        {:migrations [:db]
         :db [:flow-config]})))

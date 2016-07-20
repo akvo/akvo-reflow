@@ -4,7 +4,7 @@
             [clojure.test :refer :all]
             [ring.mock.request :as mock]))
 
-(def config {:config (atom {"akvoflowsandbox" {:apiKey "123"}})})
+(def config (atom {"akvoflowsandbox" {:apiKey "123"}}))
 
 (def basic-auth "Basic YWt2b2Zsb3dzYW5kYm94OjEyMw==")
 

@@ -1,4 +1,4 @@
-(ns akvo-reflow.component.flow-config
+(ns akvo-reflow.flow-config
   (:require [akvo.commons.config :refer [get-config]]
             [clojure.java.shell :as shell]
             [com.stuartsierra.component :as component]
@@ -13,7 +13,7 @@
           {}
           coll))
 
-(defn- get-flow-config
+(defn get-flow-config
   "Returns a map {\"app-id\" {config}}"
   [{:keys [flow-server-config]}]
   {:pre [(not-empty flow-server-config)
@@ -24,24 +24,9 @@
        (index-by :app-id)))
 
 (defn reload-config
-  [{:keys [flow-server-config] :as component}]
+  [flow-config {:keys [flow-server-config] :as system-config}]
   (let [pull (shell/with-sh-dir flow-server-config
                (shell/sh "git" "pull"))]
     (if (zero? (:exit pull))
-      (reset! (:config component) (get-flow-config component))
-      (do
-        (prn (:err pull))
-        component))))
-
-(defrecord FlowConfig []
-  component/Lifecycle
-  (start [component]
-    (if (:config component)
-      component
-      (assoc component :config (atom (get-flow-config component)))))
-  (stop [component]
-    (dissoc component :config)))
-
-(defn flow-config [cfg]
-  {:pre [(get cfg :flow-server-config)]}
-  (map->FlowConfig cfg))
+      (reset! flow-config (get-flow-config system-config))
+      (prn (:err pull)))))

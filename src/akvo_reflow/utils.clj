@@ -33,4 +33,4 @@
   Component with a `:config` key holding the configuration map"
   [handler cfg]
   (fn [req]
-    (handler (assoc req :config @(:config cfg)))))
+    (handler (assoc req :config @cfg))))
