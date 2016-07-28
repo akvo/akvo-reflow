@@ -16,13 +16,25 @@
   [data]
   (post unilog-url {:body data}))
 
-(defn process-events
+(defn get-unprocessed-events
+  "Get all unprocessed events, transform them and return a list of maps including the transformed
+   event and its ID"
   [db-uri]
-  (doseq [data (unprocessed-events db-uri)]
-    (let [event (:payload data)
-          event-properties (event-properties event)
-          kind (kind event)
-          transform (transform-event kind (drop-deprecated-props kind event-properties))
-          response (post-event (generate-string transform))]
-      (if (= 200 (:status response))
-        (set-event-processed db-uri  {:id (:id data)})))))
+  (for [data (unprocessed-events db-uri {:limit 5})         ; TODO: make limit configurable
+        :let [id (:id data)
+              event (:payload data)
+              event-properties (event-properties event)
+              kind (kind event)
+              transform (transform-event kind (drop-deprecated-props kind event-properties))]]
+    {:id id :transform transform}))
+
+(defn process-events
+  "Post events to the unilog"
+  [db-uri schema-name]
+  (let [events (get-unprocessed-events db-uri)
+        payload (generate-string {:orgId schema-name :events events})
+        response (post-event (generate-string payload))]
+    (if (= 200 (:status response))
+      (do
+        (set-events-processed db-uri  {:ids (map #(:id %) events)})))))
+
