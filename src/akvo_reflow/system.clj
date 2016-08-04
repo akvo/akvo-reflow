@@ -34,7 +34,8 @@
          :app  (handler-component (:app config))
          :http (jetty-server (:http config))
          :db   (hikaricp (:db config))
-         :migrations (ragtime {:resource-path "migrations"})
+         :base-migrations (ragtime {:resource-path "migrations/base"})
+         :schema-migrations (ragtime {:resource-path "migrations/schema"})
          :unilog (endpoint-component unilog/endpoint)
          :gae (endpoint-component gae/endpoint)
          :flow-config (atom (get-flow-config config))
@@ -44,6 +45,7 @@
           :app  [:flow-config :migrations :unilog :gae :reload]
           :unilog [:db]
           :gae [:db]
-          :migrations [:db]
-          :reload [:db :migrations :flow-config]
+          :base-migrations [:db]
+          :schema-migrations [:db]
+          :reload [:db :base-migrations :schema-migrations :flow-config]
           :db [:flow-config]}))))
