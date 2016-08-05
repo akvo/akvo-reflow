@@ -1,9 +1,10 @@
 (ns akvo-reflow.system
   (:require [akvo.commons.psql-util]
             [akvo-reflow.endpoint
-             [unilog :as unilog]
              [gae :as gae]
-             [reload :as reload]]
+             [import :as import]
+             [reload :as reload]
+             [unilog :as unilog]]
             [akvo-reflow.flow-config :refer [get-flow-config]]
             [akvo-reflow.utils :refer [wrap-config]]
             [com.stuartsierra.component :as component]
@@ -36,15 +37,17 @@
          :db   (hikaricp (:db config))
          :base-migrations (ragtime {:resource-path "migrations/base"})
          :schema-migrations (ragtime {:resource-path "migrations/schema"})
-         :unilog (endpoint-component unilog/endpoint)
-         :gae (endpoint-component gae/endpoint)
          :flow-config (atom (get-flow-config config))
-         :reload (endpoint-component reload/endpoint))
+         :gae (endpoint-component gae/endpoint)
+         :import (endpoint-component import/endpoint)
+         :reload (endpoint-component reload/endpoint)
+         :unilog (endpoint-component unilog/endpoint))
         (component/system-using
          {:http [:app]
-          :app  [:flow-config :migrations :unilog :gae :reload]
-          :unilog [:db]
+          :app  [:flow-config :base-migrations :schema-migrations :gae :import :reload :unilog ]
           :gae [:db]
+          :unilog [:db]
+          :import [:db :flow-config]
           :base-migrations [:db]
           :schema-migrations [:db]
           :reload [:db :base-migrations :schema-migrations :flow-config]
