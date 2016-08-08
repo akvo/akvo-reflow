@@ -2,7 +2,7 @@
   (:require [akvo.commons.psql-util]
             [akvo-reflow.endpoint
              [gae :as gae]
-             [import :as import]
+             [import-instance :as import-instance]
              [reload :as reload]
              [unilog :as unilog]]
             [akvo-reflow.flow-config :refer [get-flow-config]]
@@ -39,15 +39,15 @@
          :schema-migrations (ragtime {:resource-path "migrations/schema"})
          :flow-config (atom (get-flow-config config))
          :gae (endpoint-component gae/endpoint)
-         :import (endpoint-component import/endpoint)
+         :import-instance (endpoint-component import-instance/endpoint)
          :reload (endpoint-component reload/endpoint)
          :unilog (endpoint-component unilog/endpoint))
         (component/system-using
          {:http [:app]
-          :app  [:flow-config :base-migrations :schema-migrations :gae :import :reload :unilog ]
+          :app  [:flow-config :base-migrations :schema-migrations :gae :import-instance :reload :unilog ]
           :gae [:db]
           :unilog [:db]
-          :import [:db :flow-config]
+          :import-instance [:db :flow-configc]
           :base-migrations [:db]
           :schema-migrations [:db]
           :reload [:db :base-migrations :schema-migrations :flow-config]
