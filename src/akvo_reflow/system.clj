@@ -47,7 +47,7 @@
           :app  [:flow-config :base-migrations :schema-migrations :gae :import-instance :reload :unilog ]
           :gae [:db]
           :unilog [:db]
-          :import-instance [:db :flow-configc]
+          :import-instance [:db :flow-config]
           :base-migrations [:db]
           :schema-migrations [:db]
           :reload [:db :base-migrations :schema-migrations :flow-config]
