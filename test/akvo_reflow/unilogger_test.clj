@@ -18,9 +18,7 @@
         schema-name "akvoflowsandbox"]
     (with-db-schema [conn ds] schema-name
       (doseq [sample event-samples]
-        (insert-event
-         conn
-         {:payload (slurp (get-json-sample sample))}))
+        (insert-event conn {:payload (slurp (get-json-sample sample))}))
       (testing "mark as processed after successful post"
         (with-redefs [post-event (fn [data] {:status 200})] (process-events conn schema-name))
         (is

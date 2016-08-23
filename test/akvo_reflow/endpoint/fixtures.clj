@@ -15,6 +15,8 @@
        :base-migrations (ragtime {:resource-path "migrations/base"})
        :schema-migrations (ragtime {:resource-path "migrations/schema"})
        :flow-config (atom (get-flow-config {:flow-server-config "test/resources/flow"})))
+      ; local path for testing fetch-and-store-entities
+      ;:flow-config (atom (get-flow-config {:flow-server-config "/Users/gabriel/git/akvo-flow-server-config"})))
       (component/system-using
        {:base-migrations [:db]
         :schema-migrations [:db]

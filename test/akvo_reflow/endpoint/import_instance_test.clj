@@ -13,12 +13,9 @@
                              :headers {"Content-Type" "text/plain"}}})
 
 (deftest ^:functional import-instance
-  (let [handler (import-instance/endpoint test-system)
-        instance-id "akvoflowsandbox"]
-
+  (let [handler (import-instance/endpoint test-system)]
     (doseq [instance (keys instances)]
       (testing (str "import " instance)
-
         (let [req (mock/request :post (str "/import-instance/" instance) "")
               resp (handler req)]
           (is (= (select-keys resp [:status :headers])

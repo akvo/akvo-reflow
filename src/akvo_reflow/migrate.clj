@@ -23,6 +23,7 @@
   [{:keys [db schema-migrations flow-config] :as system}]
   (let [ds (select-keys (:spec db) [:datasource])]
     (doseq [flow-instance (keys @flow-config)]
+    ;(doseq [flow-instance ["akvoflowsandbox"]]
       (prn (format "Processing: %s" flow-instance))
       (jdbc/execute! ds (format "CREATE SCHEMA IF NOT EXISTS \"%s\"" flow-instance))
       (with-db-schema [conn ds] flow-instance
@@ -33,6 +34,7 @@
   (let [ds (select-keys (:spec db) [:datasource])]
     (ragtime/rollback (assoc base-migrations :datastore (ragtime-jdbc/sql-database ds)))
     (doseq [flow-instance (keys @flow-config)]
+    ;(doseq [flow-instance ["akvoflowsandbox"]]
       (prn (format "Processing: %s" flow-instance))
       (jdbc/execute! ds (format "DROP SCHEMA IF EXISTS \"%s\" CASCADE" flow-instance))))
   system)
