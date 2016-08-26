@@ -10,8 +10,8 @@
         (try
           (migrate-base system)
           (migrate-schema system)
-          {:status 200
-           :body "OK"}
+          {:status 302
+           :headers {"Location" "/status"}}
           (catch Exception e
             {:status 500
              :body (.printStackTrace e)}))))))
