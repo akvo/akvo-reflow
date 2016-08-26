@@ -17,3 +17,10 @@ UPDATE public.instance_status
 SELECT kind, cursor
     FROM public.instance_status
     WHERE instance_id = :instance-id;
+
+
+-- :name set-import-done :! :n
+-- :doc Updates import_done for :instance_id to TRUE
+UPDATE public.instance_status
+    SET import_done = TRUE
+    WHERE instance_id = :instance-id;

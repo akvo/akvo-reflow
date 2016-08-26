@@ -66,6 +66,7 @@
     (let [t0 (or (first-event-created-datetime ds)
                  (java.util.Date.))
           schema-name (:app-id config)]
+      (println "Importing: " schema-name)
       (try
         (with-db-schema [conn db-spec] schema-name
           ; figure where to start if the process was interrupted at a previous run
@@ -95,10 +96,10 @@
                           (update-cursor tx {:instance-id schema-name
                                              :kind kind
                                              :cursor-string (.toWebSafeString (.getCursor iter))}))
-                        (println "cursor hash " (.toWebSafeString (.getCursor iter)))
                         (recur (q/result ds query {:limit batch-size
                                                    :start-cursor (.getCursor iter)})))))
-                  (recur (rest kinds) {:limit batch-size}))))))
+                  (recur (rest kinds) {:limit batch-size}))))
+            (set-import-done conn {:instance-id schema-name})))
         (catch Exception e
           (.printStackTrace e))))))
 
