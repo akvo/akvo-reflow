@@ -36,6 +36,10 @@
   (migrate/migrate-base reloaded.repl/system)
   (migrate/migrate-schema reloaded.repl/system))
 
+(defn rollback []
+  (go)
+  (migrate/rollback reloaded.repl/system))
+
 (when (io/resource "local.clj")
   (load "local"))
 
