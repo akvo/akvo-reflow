@@ -1,7 +1,7 @@
 -- :name unprocessed-events :? :*
 -- :doc Get all unprocessed events
 SELECT id, payload
-    FROM events
+    FROM :i:table-name
     WHERE processed = FALSE
     LIMIT :limit;
 

@@ -10,7 +10,6 @@
   (context "/import-instance/:instance" [instance]
     (POST "/" []
       (let [ds (select-keys (-> db :spec) [:datasource])]
-        (println "instance: " instance)
         (if
           (and
             (some #(= instance %) (keys @flow-config))
@@ -18,7 +17,7 @@
               [conn ds] instance
               (= false (:import_done (instance-status ds {:instance_id instance})))))
           (do
-            (future (fetch-and-store-entities ds flow-config))
+            (future (fetch-and-store-entities ds (get @flow-config instance)))
             {:status 200
              :headers {"Content-Type" "text/plain"}
              :body (str "Started importing instance: " instance)})

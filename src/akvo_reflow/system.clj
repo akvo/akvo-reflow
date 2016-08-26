@@ -4,6 +4,7 @@
              [gae :as gae]
              [import-instance :as import-instance]
              [reload :as reload]
+             [status :as status]
              [unilog :as unilog]]
             [akvo-reflow.flow-config :refer [get-flow-config]]
             [akvo-reflow.utils :refer [wrap-config]]
@@ -41,14 +42,16 @@
          :gae (endpoint-component gae/endpoint)
          :import-instance (endpoint-component import-instance/endpoint)
          :reload (endpoint-component reload/endpoint)
+         :status (endpoint-component status/endpoint)
          :unilog (endpoint-component unilog/endpoint))
         (component/system-using
          {:http [:app]
-          :app  [:flow-config :base-migrations :schema-migrations :gae :import-instance :reload :unilog ]
+          :app  [:flow-config :base-migrations :schema-migrations :gae :import-instance :reload :status :unilog ]
           :gae [:db]
           :unilog [:db]
           :import-instance [:db :flow-config]
           :base-migrations [:db]
           :schema-migrations [:db]
           :reload [:db :base-migrations :schema-migrations :flow-config]
+          :status[:db :base-migrations :schema-migrations :flow-config]
           :db [:flow-config]}))))

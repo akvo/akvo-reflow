@@ -12,6 +12,7 @@
                  [duct/hikaricp-component "0.1.0"]
                  [duct/ragtime-component "0.1.4"]
                  [environ "1.0.3"]
+                 [hiccup "1.0.5"]
                  [meta-merge "0.1.1"]
                  [org.akvo/commons "0.4.4-SNAPSHOT"]
                  [org.clojure/clojure "1.8.0"]
