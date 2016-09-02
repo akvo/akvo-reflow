@@ -14,8 +14,8 @@
 
 (def kinds-map (array-map "SurveyGroup" "survey"
                       "Survey" "form"
-                      "QuestionGroup" "question_group"
-                      "Question" "question"
+                      ;"QuestionGroup" "question_group"
+                      ;"Question" "question"
                       ;"DeviceFiles" "device_file"
                       ;"SurveyedLocale" "data_point"
                       ;"SurveyInstance" "form_instance"

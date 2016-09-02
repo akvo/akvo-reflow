@@ -1,8 +1,10 @@
 (ns akvo-reflow.endpoint.fixtures
-  (:require [akvo-reflow.migrate :refer [migrate-base migrate-schema rollback]]
+  (:require [akvo-reflow.endpoint [status :as status]]
+            [akvo-reflow.migrate :refer [migrate-base migrate-schema rollback]]
             [akvo-reflow.flow-config :refer [get-flow-config]]
             [com.stuartsierra.component :as component]
             [dev :refer [test-db-uri]]
+            [duct.component.endpoint :refer [endpoint-component]]
             [duct.component.hikaricp :refer [hikaricp]]
             [duct.component.ragtime :refer [ragtime]]))
 
@@ -14,13 +16,15 @@
        :db (hikaricp {:uri (:connection-uri test-db-uri)})
        :base-migrations (ragtime {:resource-path "migrations/base"})
        :schema-migrations (ragtime {:resource-path "migrations/schema"})
-       :flow-config (atom (get-flow-config {:flow-server-config "test/resources/flow"})))
+       :flow-config (atom (get-flow-config {:flow-server-config "test/resources/flow"}))
+       :status (endpoint-component status/endpoint))
       ; local path for testing fetch-and-store-entities
       ;:flow-config (atom (get-flow-config {:flow-server-config "/Users/gabriel/git/akvo-flow-server-config"})))
       (component/system-using
        {:base-migrations [:db]
         :schema-migrations [:db]
-        :db [:flow-config]})))
+        :db [:flow-config]
+        :status[:db :flow-config]})))
 
 (defn system-fixture
   [f]

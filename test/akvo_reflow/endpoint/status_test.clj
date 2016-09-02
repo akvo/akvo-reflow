@@ -6,5 +6,5 @@
   (status/endpoint {}))
 
 (deftest a-test
-  (testing "FIXME, I fail."
+  (testing "FIXME, I don't do much..."
     (is (= 1 1))))

@@ -188,9 +188,9 @@
 
 (defn transform-sample
   [sample]
-  (let [data (parse (slurp (get-json-sample sample)))
-        event-properties (event-properties data)
-        kind (kind data)]
+  (let [entity (get (parse (slurp (get-json-sample sample))) "entity")
+        event-properties (event-properties entity)
+        kind (kind entity)]
           (transform-event kind (drop-deprecated-props kind event-properties))))
 
 (deftest events
