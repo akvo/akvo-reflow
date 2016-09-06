@@ -26,6 +26,7 @@
   :plugins [[lein-environ "1.0.3"]]
   :main ^:skip-aot akvo-reflow.main
   :target-path "target/%s/"
+  :uberjar-name "akvo-reflow.jar"
   :aliases {"run-task" ["with-profile" "+repl" "run" "-m"]
             "setup"    ["run-task" "dev.tasks/setup"]}
   :profiles
