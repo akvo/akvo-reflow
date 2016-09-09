@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS instance_status
   export_done boolean DEFAULT FALSE,
   kind varchar(20),
   cursor varchar(255),
-  error_status smallint,
+  process_status varchar(255) DEFAULT 'Import not started',
+  error_status varchar(50),
   error_message text);
 
 CREATE UNIQUE INDEX instance_id_unique_index
