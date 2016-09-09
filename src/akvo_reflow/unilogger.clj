@@ -46,9 +46,14 @@
            (if (= 200 (:status response))
              (do
                (set-events-processed db-uri {:table-name kind :ids (map #(:id %) events)})
+               (set-process-status db-uri {:instance-id schema-name
+                                          :process-status "Export in progress"
+                                          :error-status nil
+                                          :error-message nil})
                (recur (get-unprocessed-events db-uri kind)))
              (do
-               (set-export-interrupted db-uri {:instance-id schema-name
+               (set-process-status db-uri {:instance-id schema-name
+                                               :process-status "Export aborted"
                                                :error-status (:status response)
                                                :error-message (:body response)})
                true))))))))
@@ -64,4 +69,8 @@
               true)))
         (set-export-done conn {:instance-id instance})))
     (catch Exception e
+      (set-process-status db-spec {:instance-id instance
+                                  :process-status "Export aborted"
+                                  :error-status "Uncaught exception"
+                                   :error-message (.printStackTrace e)})
       (.printStackTrace e))))

@@ -5,6 +5,7 @@
             [hugsql.core :as hugsql]))
 
 (hugsql/def-db-fns "akvo_reflow/endpoint/import_instance.sql")
+(hugsql/def-db-fns "akvo_reflow/unilogger.sql")
 
 (defn endpoint [{:keys [config flow-config db] :as system}]
   (context "/import-instance/:instance" [instance]
@@ -17,7 +18,15 @@
               [conn ds] instance
               (= false (:import_done (instance-status ds {:instance_id instance})))))
           (do
-            (future (fetch-and-store-entities ds (get @flow-config instance)))
+            (future
+              (try
+                (fetch-and-store-entities ds (get @flow-config instance))
+                (catch Exception e
+                  (set-process-status ds {:instance-id instance
+                                           :process-status "Import aborted"
+                                           :error-status "Uncaught exception"
+                                          :error-message (.getMessage e)})
+                  (.printStackTrace e))))
             {:status 200
              :headers {"Content-Type" "text/plain"}
              :body (str "Started importing instance: " instance)})

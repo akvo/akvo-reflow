@@ -15,16 +15,20 @@ UPDATE :i:table-name
 -- :name set-export-done :! :n
 -- :doc Updates export_done for :instance_id to TRUE
 UPDATE public.instance_status
-    SET export_done = TRUE
+    SET export_done = TRUE,
+        process_status = 'Export done',
+        error_status = NULL,
+        error_message = NULL,
+        kind = NULL,
+        cursor = NULL
     WHERE instance_id = :instance-id;
 
 
-
-
--- :name set-export-interrupted :! :n
+-- :name set-process-status :! :n
 -- :doc Updates export_done for :instance_id to TRUE
 UPDATE public.instance_status
-    SET error_status = :error-status,
+    SET process_status = :process-status,
+        error_status = :error-status,
         error_message = :error-message
     WHERE instance_id = :instance-id;
 

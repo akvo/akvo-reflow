@@ -10,28 +10,52 @@
 
 (defn import-form [instance-id]
   (form-to [:post (str "/import-instance/" instance-id)]
-            (submit-button (str "No, import " instance-id))))
+           (submit-button (str "Import " instance-id))))
+
+(defn export-form [instance-id]
+  (form-to [:post (str "/export-instance/" instance-id)]
+           (submit-button (str "Export " instance-id))))
 
 (defn status-table [all-instances]
   (html
     [:table
      [:tr
       [:th "Instance name"]
-      [:th "Import done?"]
-      [:th "Export done?"]
+      [:th "Status"]
+      [:th "Import"]
+      [:th "Export"]
+      [:th "Error status"]
+      [:th "Error message"]
       [:th "Kind"]
       [:th "Cursor"]]
      (map
        (fn [instance]
          [:tr
+          ; Instance name
           [:td (:instance_id instance)]
+          ; Status
+          [:td (:process_status instance)]
+          ; Import link
           [:td (if
                  (:import_done instance)
-                 "Yes!"
+                 "Complete"
                  (import-form (:instance_id instance)))]
-          [:td (:export_done instance)]
+          ; Export link
+          [:td (if
+                 (not (:import_done instance))
+                 "Import first"
+                 (if
+                   (:export_done instance)
+                   "Complete"
+                   (export-form (:instance_id instance))))]
+          ; Error status
+          [:td (:error_status instance)]
+          ; Error message
+          [:td (:error_message instance)]
+          ; Import kind of running import
           [:td (:kind instance)]
-          [:td (:cursor instance)]])
+          ; Cursor position of running import
+          [:td {:title (:cursor instance)} (take 8 (:cursor instance)) "..." (take-last 8 (:cursor instance))]])
        (sort-by :import_done #(and (= %1 true) (= %2 false)) (sort-by :instance_id all-instances)))]))
 
 (defn status-html [all-instances]

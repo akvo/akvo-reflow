@@ -14,8 +14,8 @@
 
 (def kinds-map (array-map "SurveyGroup" "survey"
                       "Survey" "form"
-                      ;"QuestionGroup" "question_group"
-                      ;"Question" "question"
+                      "QuestionGroup" "question_group"
+                      "Question" "question"
                       ;"DeviceFiles" "device_file"
                       ;"SurveyedLocale" "data_point"
                       ;"SurveyInstance" "form_instance"
@@ -23,6 +23,7 @@
                           ))
 
 (hugsql/def-db-fns "akvo_reflow/import.sql" {:quoting :ansi})
+(hugsql/def-db-fns "akvo_reflow/unilogger.sql")
 
 (defn entity->jsonb
   [entity]
@@ -66,10 +67,9 @@
     (let [t0 (or (first-event-created-datetime ds)
                  (java.util.Date.))
           schema-name (:app-id config)]
-      (println "Importing: " schema-name)
       (try
         (with-db-schema [conn db-spec] schema-name
-          ; figure where to start if the process was interrupted at a previous run
+                        ; figure where to start if the process was interrupted at a previous run
           (let [kind-and-cursor (get-cursor conn {:instance-id schema-name})
                 kind-keys-index (zipmap (keys kinds-map) (iterate inc 0))
                 ; drop kinds that have already been processed, if any
@@ -95,11 +95,16 @@
                           (insert-entities tx table-name (iterator-seq iter))
                           (update-cursor tx {:instance-id schema-name
                                              :kind kind
-                                             :cursor-string (.toWebSafeString (.getCursor iter))}))
+                                             :cursor-string (.toWebSafeString (.getCursor iter))
+                                             :process-status "Import in progress"}))
                         (recur (q/result ds query {:limit batch-size
                                                    :start-cursor (.getCursor iter)})))))
                   (recur (rest kinds) {:limit batch-size}))))
             (set-import-done conn {:instance-id schema-name})))
         (catch Exception e
+          (set-process-status db-spec {:instance-id schema-name
+                                       :process-status "Import aborted"
+                                       :error-status "Uncaught exception"
+                                       :error-message (.getMessage e)})
           (.printStackTrace e))))))
 

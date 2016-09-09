@@ -40,6 +40,10 @@
   (go)
   (migrate/rollback reloaded.repl/system))
 
+(defn yoyo []
+  (rollback)
+  (migrate))
+
 (when (io/resource "local.clj")
   (load "local"))
 

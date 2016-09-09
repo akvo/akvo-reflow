@@ -8,7 +8,10 @@ VALUES (:created-at, :payload)
 -- :doc Updates import_done for :instance_id to TRUE
 UPDATE public.instance_status
     SET cursor = :cursor-string,
-        kind = :kind
+        kind = :kind,
+        process_status = 'Import in progress',
+        error_status = NULL,
+        error_message = NULL
     WHERE instance_id = :instance-id;
 
 
@@ -22,5 +25,10 @@ SELECT kind, cursor
 -- :name set-import-done :! :n
 -- :doc Updates import_done for :instance_id to TRUE
 UPDATE public.instance_status
-    SET import_done = TRUE
+    SET import_done = TRUE,
+        process_status = 'Import done',
+        error_status = NULL,
+        error_message = NULL,
+        kind = NULL,
+        cursor = NULL
     WHERE instance_id = :instance-id;
