@@ -2,7 +2,7 @@
   (:gen-class)
   (:require [akvo-reflow.auth :refer [wrap-basic-auth wrap-auth-required]]
             [akvo-reflow.config :as config]
-            [akvo-reflow.migrate :as migrate]
+            [akvo-reflow.migrate :refer [migrate-base migrate-schema]]
             [akvo-reflow.system :refer [new-system]]
             [com.stuartsierra.component :as component]
             [duct.middleware.errors :refer [wrap-hide-errors]]
@@ -26,4 +26,5 @@
     (add-shutdown-hook ::stop-system #(component/stop system))
     (-> system
         component/start
-        migrate/migrate)))
+        migrate-base
+        migrate-schema)))

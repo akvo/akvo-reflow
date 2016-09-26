@@ -10,4 +10,7 @@
       "unilog")
     (POST "/" []
       (fn [{:keys [:body]}]
-        (json/generate-string (slurp body))))))
+        (println "Got some JSON:")
+        (println (slurp body))
+        {:status 200
+         :body "OK"}))))

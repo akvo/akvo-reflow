@@ -24,10 +24,10 @@
   (json/parse-string json))
 
 (defn event-properties [data]
-  (get-in data ["entity" "properties"]))
+  (get data "properties"))
 
 (defn kind [data]
-  (get-in data ["entity" "kind"]))
+  (get data "kind"))
 
 (defn drop-deprecated-props
   "Remove deprecated properties from the event"

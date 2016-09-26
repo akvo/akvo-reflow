@@ -1,9 +1,12 @@
 (ns akvo-reflow.system
   (:require [akvo.commons.psql-util]
             [akvo-reflow.endpoint
-             [unilog :as unilog]
              [gae :as gae]
-             [reload :as reload]]
+             [import-instance :as import-instance]
+             [export-instance :as export-instance]
+             [reload :as reload]
+             [status :as status]
+             [unilog :as unilog]]
             [akvo-reflow.flow-config :refer [get-flow-config]]
             [akvo-reflow.utils :refer [wrap-config]]
             [com.stuartsierra.component :as component]
@@ -34,16 +37,25 @@
          :app  (handler-component (:app config))
          :http (jetty-server (:http config))
          :db   (hikaricp (:db config))
-         :migrations (ragtime {:resource-path "migrations"})
-         :unilog (endpoint-component unilog/endpoint)
-         :gae (endpoint-component gae/endpoint)
+         :base-migrations (ragtime {:resource-path "migrations/base"})
+         :schema-migrations (ragtime {:resource-path "migrations/schema"})
          :flow-config (atom (get-flow-config config))
-         :reload (endpoint-component reload/endpoint))
+         :gae (endpoint-component gae/endpoint)
+         :import-instance (endpoint-component import-instance/endpoint)
+         :export-instance (endpoint-component export-instance/endpoint)
+         :reload (endpoint-component reload/endpoint)
+         :status (endpoint-component status/endpoint)
+         :unilog (endpoint-component unilog/endpoint))
         (component/system-using
          {:http [:app]
-          :app  [:flow-config :migrations :unilog :gae :reload]
-          :unilog [:db]
+          :app  [:flow-config :base-migrations :schema-migrations :gae :import-instance :export-instance :reload
+                 :status :unilog]
           :gae [:db]
-          :migrations [:db]
-          :reload [:db :migrations :flow-config]
+          :unilog [:db]
+          :import-instance [:db :base-migrations :schema-migrations :flow-config]
+          :export-instance [:db :base-migrations :schema-migrations :flow-config]
+          :base-migrations [:db]
+          :schema-migrations [:db]
+          :reload [:db :base-migrations :schema-migrations :flow-config]
+          :status[:db :base-migrations :schema-migrations :flow-config]
           :db [:flow-config]}))))
